@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{DECK_TITLE}}</title>
+  <style>{{DECK_CSS}}</style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+{{SLIDES}}
+  </main>
+  <div class="overview" id="overview" aria-hidden="true"><div class="overview-grid" id="overviewGrid"></div></div>
+  <aside class="edit-toolbar" id="editToolbar" aria-hidden="true">
+    <div class="edit-toolbar-title">编辑工具</div>
+    <div class="edit-target" id="editTargetLabel">未选择元素</div>
+    <div class="edit-group"><span>文字</span><button data-edit="font-dec">A-</button><button data-edit="font-inc">A+</button><button data-edit="bold">加粗</button></div>
+    <div class="edit-group"><span>行高</span><button data-edit="line-tight">紧</button><button data-edit="line-normal">中</button><button data-edit="line-loose">松</button></div>
+    <div class="edit-group"><span>颜色</span><button data-edit="color-ink">黑</button><button data-edit="color-clay">陶土</button><button data-edit="color-stone">灰</button></div>
+    <div class="edit-group"><span>对齐</span><button data-edit="align-left">左</button><button data-edit="align-center">中</button><button data-edit="align-right">右</button></div>
+    <div class="edit-group"><span>换行</span><button data-edit="insert-br">插入</button><button data-edit="clear-br">清除</button></div>
+    <div class="edit-group"><span>尺寸</span><button data-edit="width-dec">宽-</button><button data-edit="width-inc">宽+</button><button data-edit="size-reset">自动</button></div>
+    <div class="edit-group"><span>高度</span><button data-edit="height-dec">高-</button><button data-edit="height-inc">高+</button><button data-edit="nowrap-toggle">不换行</button></div>
+    <div class="edit-group"><span>内距</span><button data-edit="pad-compact">紧</button><button data-edit="pad-normal">中</button><button data-edit="pad-loose">松</button></div>
+    <div class="edit-group"><span>元素</span><button data-edit="duplicate-element">复制</button><button data-edit="delete-element">删除</button><button data-edit="reset-move">归位</button></div>
+    <div class="edit-group"><span>容器</span><button data-edit="duplicate-block">复制</button><button data-edit="toggle-highlight">强调</button><button data-edit="delete-block">删除</button></div>
+    <div class="edit-group"><span>页面</span><button data-edit="density-compact">紧凑</button><button data-edit="density-normal">默认</button><button data-edit="density-loose">宽松</button></div>
+    <div class="edit-help">点击元素后使用工具。移动元素：需要按住 Alt / Option 再拖拽。方向键微调。Cmd/Ctrl+S 保存，Esc 退出。</div>
+  </aside>
+  <div class="editor-toast" id="editorToast" role="status"></div>
+  <footer class="footer"><span id="pageText">01 / 01</span><div class="progress" aria-hidden="true"><span id="progressBar"></span></div><div class="nav" aria-label="slide navigation"><button type="button" id="prevBtn" aria-label="上一页">‹</button><button type="button" id="nextBtn" aria-label="下一页">›</button></div></footer>
+  <script>
+{{DECK_JS}}
+  </script>
+</body>
+</html>

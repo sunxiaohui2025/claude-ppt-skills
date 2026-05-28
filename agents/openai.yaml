@@ -1,0 +1,4 @@
+display_name: Dune Keynote Slide
+short_description: 生成沙丘色高端发布会 HTML PPT
+brand_color: '#a8553d'
+default_prompt: Use $dune-keynote-slide to create a high-end dune-color keynote-style HTML deck.
