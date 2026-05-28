@@ -4,6 +4,13 @@
 
 它适合把大纲、笔记、Markdown、粗略想法或技术材料，转换成一套可以直接演示的 HTML 幻灯片。默认视觉风格是「沙丘色」：暖米色背景、陶土主色、克制动效、大标题叙事、宽松留白，整体更接近发布会 / Keynote / 技术宣讲，而不是传统 PPT 模板。
 
+## 效果图
+<img width="1427" height="701" alt="截屏2026-05-28 10 23 35" src="https://github.com/user-attachments/assets/0dc4eaa9-8799-438a-b777-b8d6d1dac842" />
+<img width="1422" height="700" alt="截屏2026-05-28 10 24 13" src="https://github.com/user-attachments/assets/ff0fdf09-9a56-478f-a19b-d4c18fe1d711" />
+<img width="1432" height="703" alt="截屏2026-05-28 10 24 33" src="https://github.com/user-attachments/assets/60a78fd2-0986-4fe7-abec-af958721b5a9" />
+
+
+
 ## 这个 Skill 解决什么问题
 
 它希望解决 AI 生成 PPT 时常见的几个问题：
