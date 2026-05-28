@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>沙丘色发布会 HTML PPT 全量布局模板</title>
+  <style>
+    :root {
+      --cream: #fbf7ef;
+      --porcelain: #fffdf8;
+      --sand: #ead8c8;
+      --sand-soft: #f5ebe0;
+      --clay: #a8553d;
+      --clay-2: #c8795a;
+      --clay-soft: rgba(168, 85, 61, 0.13);
+      --ink: #1f1f1d;
+      --stone: #68615b;
+      --muted: #a49a90;
+      --sage: #73806f;
+      --line: rgba(31, 31, 29, 0.12);
+      --clay-line: rgba(168, 85, 61, 0.32);
+      --stage-top: clamp(58px, 8.4vh, 96px);
+      --stage-bottom: clamp(92px, 11.6vh, 132px);
+      --stage-x: clamp(64px, 7vw, 124px);
+      --stage-w: min(1180px, calc(100vw - var(--stage-x) * 2));
+      --stage-h: min(650px, calc(100vh - var(--stage-top) - var(--stage-bottom)));
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "Alibaba PuHuiTi", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(31,31,29,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31,31,29,.016) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at 50% 48%, black 0 40%, transparent 76%);
+      opacity: .5;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      left: var(--stage-x);
+      right: var(--stage-x);
+      bottom: calc(var(--stage-bottom) - 28px);
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(168,85,61,.55), transparent);
+      opacity: .7;
+    }
+
+    .deck { position: relative; width: 100vw; height: 100vh; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      min-width: 960px;
+      min-height: 540px;
+      padding: var(--stage-top) var(--stage-x) var(--stage-bottom);
+    }
+
+    .slide.active {
+      display: grid;
+      place-items: center;
+      animation: enter 520ms cubic-bezier(.2,.75,.2,1) both;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(16px) scale(.994); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .slide-stage {
+      position: relative;
+      z-index: 1;
+      width: var(--stage-w);
+      min-height: min(62vh, var(--stage-h));
+      max-height: var(--stage-h);
+      display: grid;
+      align-content: center;
+    }
+
+    .title-block { width: 100%; }
+    .proof-object { width: 100%; margin: clamp(26px, 4.3vh, 42px) auto 0; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 1080px;
+      font-size: clamp(68px, min(8vw, 13vh), 112px);
+      line-height: .96;
+      font-weight: 950;
+      letter-spacing: -.07em;
+    }
+
+    h2 {
+      max-width: 1040px;
+      font-size: clamp(44px, min(5vw, 8.6vh), 72px);
+      line-height: 1.04;
+      font-weight: 950;
+      letter-spacing: -.062em;
+    }
+
+    h3 {
+      color: var(--ink);
+      font-size: clamp(24px, 2.5vw, 34px);
+      line-height: 1.12;
+      font-weight: 930;
+      letter-spacing: -.048em;
+    }
+
+    .claim {
+      max-width: 840px;
+      margin-top: 20px;
+      color: var(--stone);
+      font-size: clamp(20px, min(2vw, 3.5vh), 28px);
+      line-height: 1.48;
+      font-weight: 680;
+      letter-spacing: -.018em;
+    }
+
+    .accent { color: var(--clay); }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: clamp(16px, 2.8vh, 26px);
+      color: var(--clay);
+      font-size: 14px;
+      font-weight: 920;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before { content: ""; width: 42px; height: 2px; background: var(--clay); }
+
+    .pill-row { display: flex; gap: 14px; align-items: center; margin-bottom: 28px; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 24px;
+      border-radius: 999px;
+      color: var(--clay);
+      background: rgba(234,216,200,.74);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .meta { margin-top: 32px; color: var(--stone); font-size: 24px; line-height: 1.42; font-weight: 760; }
+
+    .panel {
+      background: rgba(255,253,248,.54);
+      border: 1px solid rgba(31,31,29,.08);
+      border-radius: 34px;
+    }
+
+    .thin-panel {
+      background: rgba(255,253,248,.42);
+      border-left: 5px solid var(--clay);
+    }
+
+    .cover-atmosphere {
+      position: absolute;
+      inset: -6vh -4vw auto auto;
+      width: min(50vw, 640px);
+      height: min(50vw, 640px);
+      pointer-events: none;
+      opacity: .82;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      inset: 8%;
+      border: 1px solid rgba(168,85,61,.16);
+      border-radius: 50%;
+      animation: slowSpin 30s linear infinite;
+    }
+
+    .orbit-ring:nth-child(2) { inset: 24%; border-style: dashed; animation-duration: 42s; animation-direction: reverse; }
+
+    .float-glyph {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: clamp(52px, 5.4vw, 76px);
+      height: clamp(52px, 5.4vw, 76px);
+      border-radius: 23px;
+      color: rgba(168,85,61,.48);
+      background: rgba(255,253,248,.42);
+      border: 1px solid rgba(168,85,61,.13);
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 920;
+      box-shadow: 0 24px 90px rgba(94,64,37,.10);
+      animation: floatDrift 7s ease-in-out infinite;
+    }
+
+    .float-glyph.one { right: 20%; top: 10%; }
+    .float-glyph.two { right: 3%; top: 43%; animation-delay: -1.8s; }
+    .float-glyph.three { right: 38%; top: 58%; animation-delay: -3.5s; }
+
+    .stage-mark {
+      position: absolute;
+      right: 2%;
+      bottom: 2%;
+      width: clamp(210px, 23vw, 300px);
+      height: clamp(210px, 23vw, 300px);
+      display: grid;
+      place-items: center;
+      border-radius: clamp(44px, 5vw, 72px);
+      background: rgba(255,253,248,.52);
+      border: 1px solid rgba(168,85,61,.12);
+      box-shadow: 0 34px 120px rgba(94,64,37,.12);
+      animation: markFloat 8s ease-in-out infinite;
+    }
+
+    .burst { position: relative; width: clamp(112px, 11vw, 150px); height: clamp(112px, 11vw, 150px); animation: slowSpin 24s linear infinite; }
+    .burst span {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: clamp(12px, 1.2vw, 18px);
+      height: clamp(104px, 10.4vw, 144px);
+      margin: calc(clamp(104px, 10.4vw, 144px) / -2) 0 0 calc(clamp(12px, 1.2vw, 18px) / -2);
+      border-radius: 999px;
+      background: rgba(168,85,61,.72);
+      transform: rotate(calc(var(--i) * 20deg));
+    }
+
+    @keyframes slowSpin { to { transform: rotate(360deg); } }
+    @keyframes markFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes floatDrift { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px,12px,0); } }
+
+    .layout-cover .title-block { padding-right: min(28vw, 340px); }
+
+    .agenda-runway { display: grid; border-top: 1px solid var(--clay-line); border-bottom: 1px solid var(--clay-line); }
+    .agenda-row { display: grid; grid-template-columns: 90px 1fr; gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .agenda-row:last-child { border-bottom: 0; }
+    .agenda-row strong { color: var(--clay); font-size: clamp(36px, 4vw, 50px); line-height: 1; font-weight: 950; letter-spacing: -.06em; }
+    .agenda-row h3 { font-size: clamp(28px, 3.2vw, 38px); }
+    .agenda-row p { margin-top: 7px; color: var(--stone); font-size: 20px; line-height: 1.42; font-weight: 650; }
+
+    .text-body { max-width: 900px; color: var(--stone); font-size: clamp(21px, 2.1vw, 28px); line-height: 1.56; font-weight: 650; }
+    .bullet-list { display: grid; gap: 14px; margin: 28px 0 0; padding: 0; list-style: none; }
+    .bullet-list li { color: var(--stone); font-size: clamp(19px, 1.8vw, 23px); line-height: 1.45; font-weight: 660; }
+    .bullet-list li::before { content: "✓"; color: var(--clay); margin-right: 12px; font-weight: 950; }
+
+    .split { display: grid; grid-template-columns: .92fr 1.08fr; gap: clamp(46px, 6vw, 76px); align-items: center; }
+    .split.reverse { grid-template-columns: 1.08fr .92fr; }
+    .stack-vertical { display: grid; gap: 28px; }
+    .image-box { min-height: clamp(280px, 43vh, 430px); border-radius: 42px; background: var(--porcelain); border: 1px solid rgba(168,85,61,.12); box-shadow: 0 30px 100px rgba(94,64,37,.11); position: relative; overflow: hidden; }
+    .image-box::before { content: ""; position: absolute; inset: 28px; border-radius: 30px; background: linear-gradient(135deg, rgba(168,85,61,.20), rgba(245,235,224,.88)); }
+    .image-box::after { content: attr(data-label); position: absolute; right: 28px; top: 24px; color: var(--clay); background: rgba(234,216,200,.78); border-radius: 999px; padding: 10px 18px; font-size: 14px; font-weight: 900; }
+
+    .full-image { min-height: min(58vh, 520px); border-radius: 44px; display: grid; align-content: end; padding: clamp(34px, 5vh, 54px); background: radial-gradient(circle at 74% 30%, rgba(168,85,61,.24), transparent 30%), linear-gradient(135deg, rgba(255,253,248,.88), rgba(234,216,200,.74)); border: 1px solid rgba(168,85,61,.14); box-shadow: 0 34px 120px rgba(94,64,37,.12); }
+    .full-image h2 { max-width: 760px; }
+
+    .icons-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+    .icon-item { min-height: 210px; display: grid; align-content: center; gap: 22px; padding: 28px; border-top: 1px solid var(--clay-line); }
+    .icon-symbol { width: 70px; height: 70px; display: grid; place-items: center; border-radius: 24px; color: var(--clay); background: rgba(168,85,61,.11); font-size: 34px; font-weight: 950; }
+    .icon-item p { color: var(--stone); font-size: 19px; line-height: 1.42; font-weight: 650; }
+
+    .cards-2, .cards-3, .grid-4 { display: grid; gap: 24px; }
+    .cards-2 { grid-template-columns: repeat(2, 1fr); }
+    .cards-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .card { min-height: clamp(190px, 29vh, 250px); padding: 32px; display: grid; align-content: space-between; }
+    .card .num { color: var(--clay); font-size: 46px; line-height: 1; font-weight: 950; letter-spacing: -.06em; }
+    .card p { margin-top: 12px; color: var(--stone); font-size: 19px; line-height: 1.45; font-weight: 650; }
+    .grid-4 .card { min-height: clamp(130px, 20vh, 180px); }
+
+    .multi-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; border-top: 1px solid var(--clay-line); padding-top: 28px; }
+    .column-list h3 { color: var(--clay); font-size: 24px; margin-bottom: 16px; }
+    .column-list p { padding: 13px 0; color: var(--stone); font-size: 19px; font-weight: 650; border-bottom: 1px solid var(--line); }
+
+    .compare-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .compare-panel { min-height: clamp(300px, 48vh, 420px); padding: 42px; display: grid; align-content: center; }
+    .compare-panel.hot { background: rgba(168,85,61,.10); border-color: rgba(168,85,61,.26); }
+    .compare-panel .label { color: var(--clay); font-size: 15px; letter-spacing: .14em; font-weight: 920; text-transform: uppercase; }
+    .compare-panel h3 { margin-top: 22px; font-size: clamp(34px, 4vw, 52px); }
+    .compare-panel p { margin-top: 20px; color: var(--stone); font-size: 22px; line-height: 1.45; font-weight: 670; }
+
+    .table { display: grid; border-top: 1px solid var(--clay-line); border-left: 1px solid var(--line); }
+    .table-row { display: grid; grid-template-columns: 1.1fr repeat(3, 1fr); }
+    .table-cell { min-height: 76px; padding: 18px 20px; display: grid; align-content: center; color: var(--stone); font-size: 18px; line-height: 1.35; font-weight: 650; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .table-cell.head { color: var(--ink); font-weight: 920; background: rgba(255,253,248,.42); }
+    .table-cell.hot { color: var(--clay); background: rgba(168,85,61,.08); font-weight: 900; }
+
+    .timeline-h { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 52px; padding-top: 44px; border-top: 4px solid rgba(168,85,61,.34); }
+    .timeline-h .phase { position: relative; padding-right: 26px; }
+    .timeline-h .phase::before { content: ""; position: absolute; top: -59px; left: 0; width: 29px; height: 29px; border-radius: 50%; background: var(--clay); box-shadow: 0 0 0 12px rgba(168,85,61,.12); }
+    .phase time { color: var(--clay); font-size: 17px; font-weight: 920; }
+    .phase h3 { margin-top: 12px; font-size: 30px; }
+    .phase p { margin-top: 10px; color: var(--stone); font-size: 19px; line-height: 1.42; font-weight: 650; }
+
+    .timeline-v { display: grid; gap: 20px; max-width: 880px; margin-left: auto; margin-right: auto; }
+    .v-step { display: grid; grid-template-columns: 82px 1fr; gap: 24px; align-items: start; }
+    .v-dot { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--clay); font-size: 22px; font-weight: 950; }
+    .v-step div:last-child { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .v-step p { margin-top: 8px; color: var(--stone); font-size: 20px; line-height: 1.42; font-weight: 650; }
+
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; align-items: stretch; }
+    .flow-step { position: relative; min-height: 190px; padding: 26px 22px; border-top: 4px solid var(--clay); }
+    .flow-step:not(:last-child)::after { content: "→"; position: absolute; right: -17px; top: 50%; transform: translate(50%, -50%); color: var(--clay); font-size: 30px; font-weight: 950; z-index: 2; }
+    .flow-step strong { color: var(--clay); font-size: 34px; font-weight: 950; }
+    .flow-step p { margin-top: 12px; color: var(--stone); font-size: 18px; line-height: 1.42; font-weight: 650; }
+
+    .cycle { width: min(620px, 58vh); height: min(620px, 58vh); min-width: 420px; min-height: 420px; margin: 0 auto; position: relative; border: 2px solid rgba(168,85,61,.22); border-radius: 50%; }
+    .cycle-core { position: absolute; inset: 34%; display: grid; place-items: center; text-align: center; border-radius: 50%; color: var(--clay); background: rgba(168,85,61,.10); font-size: 28px; font-weight: 950; }
+    .cycle-node { position: absolute; width: 154px; min-height: 84px; padding: 18px; display: grid; place-items: center; text-align: center; color: var(--ink); font-size: 20px; font-weight: 850; background: var(--porcelain); border-radius: 26px; border: 1px solid rgba(168,85,61,.18); }
+    .cycle-node.n1 { left: 50%; top: -20px; transform: translateX(-50%); }
+    .cycle-node.n2 { right: -24px; top: 50%; transform: translateY(-50%); }
+    .cycle-node.n3 { left: 50%; bottom: -20px; transform: translateX(-50%); }
+    .cycle-node.n4 { left: -24px; top: 50%; transform: translateY(-50%); }
+
+    .branch { display: grid; grid-template-columns: .82fr 1.18fr; gap: 54px; align-items: center; }
+    .branch-main { color: var(--clay); font-size: clamp(54px, 6vw, 82px); line-height: 1; font-weight: 950; letter-spacing: -.065em; }
+    .branch-list { display: grid; gap: 18px; }
+    .branch-item { min-height: 86px; padding: 22px 26px; display: grid; align-content: center; }
+    .branch-item p { color: var(--stone); font-size: 20px; line-height: 1.42; font-weight: 650; }
+
+    .tree { display: grid; gap: 30px; justify-items: center; }
+    .tree-root, .tree-node { padding: 20px 30px; border-radius: 999px; background: rgba(168,85,61,.10); color: var(--clay); font-size: 24px; font-weight: 920; border: 1px solid rgba(168,85,61,.22); }
+    .tree-level { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
+    .tree-node { display: grid; min-height: 110px; place-items: center; text-align: center; border-radius: 30px; background: rgba(255,253,248,.48); color: var(--ink); }
+
+    .radial { min-height: 430px; position: relative; display: grid; place-items: center; }
+    .radial-core { width: 230px; height: 230px; display: grid; place-items: center; text-align: center; border-radius: 50%; color: var(--clay); background: rgba(168,85,61,.12); font-size: 34px; font-weight: 950; }
+    .radial-node { position: absolute; min-width: 170px; padding: 18px 22px; text-align: center; border-radius: 999px; background: var(--porcelain); border: 1px solid rgba(168,85,61,.18); color: var(--stone); font-size: 19px; font-weight: 720; }
+    .radial-node.r1 { top: 8px; left: 50%; transform: translateX(-50%); }
+    .radial-node.r2 { right: 6%; top: 40%; }
+    .radial-node.r3 { bottom: 24px; right: 22%; }
+    .radial-node.r4 { bottom: 24px; left: 22%; }
+    .radial-node.r5 { left: 6%; top: 40%; }
+
+    .nested { display: grid; place-items: center; min-height: 430px; }
+    .nest-box { width: 88%; min-height: 380px; padding: 38px; border: 2px solid rgba(168,85,61,.22); border-radius: 42px; display: grid; align-content: center; }
+    .nest-box h3 { color: var(--clay); }
+    .nest-inner { margin-top: 28px; padding: 30px; border-radius: 32px; background: rgba(168,85,61,.09); }
+    .nest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
+    .nest-grid div { min-height: 86px; display: grid; place-items: center; border-radius: 24px; background: var(--porcelain); color: var(--stone); font-size: 19px; font-weight: 750; }
+
+    .chart-card { min-height: 430px; padding: 38px; display: grid; align-content: end; }
+    .bars { height: 290px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; align-items: end; }
+    .bar { border-radius: 20px 20px 0 0; background: rgba(168,85,61,.22); position: relative; }
+    .bar.hot { background: var(--clay); }
+    .bar span { position: absolute; left: 0; right: 0; bottom: -34px; text-align: center; color: var(--stone); font-size: 16px; font-weight: 760; }
+
+    .pie-wrap { display: grid; grid-template-columns: .86fr 1.14fr; gap: 54px; align-items: center; }
+    .pie { width: min(360px, 42vh); height: min(360px, 42vh); border-radius: 50%; background: conic-gradient(var(--clay) 0 46%, rgba(168,85,61,.32) 46% 72%, rgba(168,85,61,.16) 72% 100%); box-shadow: inset 0 0 0 44px var(--cream); }
+    .legend { display: grid; gap: 20px; }
+    .legend p { color: var(--stone); font-size: 22px; font-weight: 720; }
+    .legend strong { color: var(--clay); font-size: 34px; margin-right: 14px; }
+
+    .line-chart { min-height: 430px; padding: 36px; position: relative; }
+    .line-chart svg { width: 100%; height: 310px; overflow: visible; }
+    .axis-labels { display: flex; justify-content: space-between; color: var(--stone); font-size: 16px; font-weight: 760; }
+
+    .combo { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; }
+    .combo .chart-card { min-height: 390px; }
+    .mini-bars { height: 230px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: end; }
+    .mini-line { display: grid; align-content: center; min-height: 230px; }
+
+    .statement-stage { text-align: center; justify-items: center; }
+    .statement-stage h2 { max-width: 1080px; font-size: clamp(56px, min(6.5vw, 10.5vh), 90px); }
+    .statement-rule { width: min(680px, 58vw); height: 2px; margin-top: 46px; background: linear-gradient(90deg, transparent, rgba(168,85,61,.78), transparent); }
+
+    .problem-solution { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    .ps-row { display: grid; gap: 16px; }
+    .ps-item { min-height: 106px; padding: 24px; display: grid; align-content: center; }
+    .ps-item h3 { color: var(--clay); font-size: 26px; }
+    .ps-item p { margin-top: 8px; color: var(--stone); font-size: 19px; line-height: 1.42; font-weight: 650; }
+
+    .goal-plan { display: grid; grid-template-columns: .9fr 1.1fr; gap: 54px; align-items: center; }
+    .goal-number { color: var(--clay); font-size: clamp(112px, min(14vw, 22vh), 190px); line-height: .82; font-weight: 950; letter-spacing: -.1em; }
+    .plan-list { display: grid; gap: 20px; }
+    .plan-item { display: grid; grid-template-columns: 70px 1fr; gap: 22px; align-items: center; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .plan-item strong { color: var(--clay); font-size: 38px; font-weight: 950; }
+    .plan-item p { color: var(--stone); font-size: 21px; line-height: 1.36; font-weight: 690; }
+
+    .thanks { text-align: center; justify-items: center; }
+    .thanks h2 { font-size: clamp(72px, min(8vw, 13vh), 120px); }
+    .thanks .claim { margin-left: auto; margin-right: auto; }
+
+
+
+    .title-accent {
+      color: var(--clay);
+      font-weight: 950;
+    }
+
+    .subtitle-band {
+      display: flex;
+      align-items: center;
+      min-height: clamp(74px, 10vh, 104px);
+      margin-top: clamp(24px, 4vh, 36px);
+      padding: 20px clamp(28px, 4vw, 48px);
+      border-left: 7px solid var(--clay);
+      border-radius: 0 22px 22px 0;
+      color: var(--stone);
+      background: rgba(168,85,61,.095);
+      font-size: clamp(22px, 2.25vw, 31px);
+      line-height: 1.38;
+      font-weight: 760;
+      letter-spacing: -.025em;
+    }
+
+    .subtitle-band strong { color: var(--clay); font-weight: 950; }
+
+    .colored-card {
+      background: rgba(168,85,61,.095);
+      border-color: rgba(168,85,61,.30);
+      box-shadow: inset 0 0 0 1px rgba(168,85,61,.08);
+    }
+
+    .flow-cards {
+      display: grid;
+      grid-template-columns: 1fr 70px 1fr 70px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .delivery-card {
+      min-height: clamp(238px, 35vh, 310px);
+      padding: clamp(28px, 3vw, 42px);
+      display: grid;
+      align-content: center;
+    }
+
+    .delivery-card .role {
+      color: var(--clay);
+      font-size: 20px;
+      font-weight: 920;
+      letter-spacing: .04em;
+    }
+
+    .delivery-card h3 {
+      margin-top: 20px;
+      font-size: clamp(28px, 3vw, 40px);
+    }
+
+    .delivery-card p {
+      margin-top: 18px;
+      color: var(--stone);
+      font-size: clamp(19px, 1.8vw, 24px);
+      line-height: 1.42;
+      font-weight: 680;
+    }
+
+    .chips {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      color: var(--clay);
+      background: rgba(168,85,61,.10);
+      border: 1px solid rgba(168,85,61,.18);
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    .flow-arrow {
+      color: var(--clay);
+      text-align: center;
+      font-size: 46px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .bottom-conclusion {
+      min-height: clamp(70px, 9vh, 96px);
+      margin-top: clamp(26px, 4vh, 38px);
+      padding: 20px clamp(32px, 4vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      color: var(--stone);
+      background: rgba(168,85,61,.09);
+      font-size: clamp(21px, 2.1vw, 29px);
+      line-height: 1.35;
+      font-weight: 760;
+      text-align: center;
+    }
+
+    .bottom-conclusion strong { color: var(--clay); font-weight: 950; }
+
+    .subtitle-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .subtitle-card-grid .card {
+      min-height: clamp(238px, 35vh, 310px);
+      align-content: center;
+    }
+
+
+
+    .calm-icons {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .72;
+    }
+
+    .calm-icons span {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: clamp(42px, 4.4vw, 64px);
+      height: clamp(42px, 4.4vw, 64px);
+      border-radius: 18px;
+      color: rgba(168,85,61,.30);
+      background: rgba(168,85,61,.055);
+      border: 1px solid rgba(168,85,61,.08);
+      font-size: clamp(20px, 2.2vw, 30px);
+      font-weight: 900;
+      animation: calmFloat 9s ease-in-out infinite;
+    }
+
+    .calm-icons span:nth-child(1) { right: 7%; top: 8%; }
+    .calm-icons span:nth-child(2) { left: 8%; bottom: 12%; animation-delay: -2.4s; }
+    .calm-icons span:nth-child(3) { right: 22%; bottom: 4%; animation-delay: -4.8s; }
+
+    @keyframes calmFloat {
+      0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
+      50% { transform: translate3d(0,-10px,0) rotate(4deg); }
+    }
+
+    .text-page-clean {
+      display: grid;
+      grid-template-columns: .86fr 1.14fr;
+      gap: clamp(44px, 6vw, 76px);
+      align-items: center;
+    }
+
+    .text-page-clean .text-body {
+      max-width: none;
+      padding: clamp(30px, 4vw, 46px);
+      border-left: 6px solid var(--clay);
+      border-radius: 0 28px 28px 0;
+      background: rgba(168,85,61,.065);
+    }
+
+    .text-page-clean .text-body p {
+      color: var(--ink);
+      font-size: clamp(23px, 2.2vw, 31px);
+      line-height: 1.42;
+      font-weight: 820;
+      letter-spacing: -.03em;
+    }
+
+    .text-page-clean .bullet-list {
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(168,85,61,.22);
+    }
+
+    .text-page-clean .bullet-list li {
+      font-size: clamp(18px, 1.75vw, 22px);
+    }
+
+    .statement-stage .claim,
+    .thanks .claim {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .statement-stage .statement-rule,
+    .thanks .statement-rule {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .thanks {
+      position: relative;
+      overflow: visible;
+    }
+
+    .thanks-orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(54vw, 620px);
+      height: min(54vw, 620px);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: -1;
+      opacity: .52;
+    }
+
+    .thanks-orbit::before,
+    .thanks-orbit::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(168,85,61,.14);
+      animation: slowSpin 42s linear infinite;
+    }
+
+    .thanks-orbit::after {
+      inset: 18%;
+      border-style: dashed;
+      animation-duration: 58s;
+      animation-direction: reverse;
+    }
+
+
+
+    .author-meta {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 20px;
+      border-radius: 999px;
+      color: var(--clay);
+      background: rgba(168,85,61,.085);
+      border: 1px solid rgba(168,85,61,.16);
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: -.01em;
+    }
+
+    .thanks .author-meta {
+      justify-content: center;
+      margin-top: 34px;
+    }
+
+
+
+    .thanks .title-block {
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .thanks .kicker {
+      justify-self: center;
+    }
+
+
+
+    .thanks-mark {
+      width: clamp(106px, 10vw, 148px);
+      height: clamp(106px, 10vw, 148px);
+      display: grid;
+      place-items: center;
+      margin: 0 auto clamp(24px, 3.8vh, 38px);
+      border-radius: 34px;
+      background: rgba(255,253,248,.58);
+      border: 1px solid rgba(168,85,61,.18);
+      box-shadow: 0 28px 90px rgba(94,64,37,.13);
+      animation: markFloat 7s ease-in-out infinite;
+    }
+
+    .thanks-mark .burst {
+      width: clamp(64px, 6.4vw, 92px);
+      height: clamp(64px, 6.4vw, 92px);
+      animation-duration: 20s;
+    }
+
+    .thanks-mark .burst span {
+      width: clamp(8px, .8vw, 12px);
+      height: clamp(60px, 6vw, 88px);
+      margin: calc(clamp(60px, 6vw, 88px) / -2) 0 0 calc(clamp(8px, .8vw, 12px) / -2);
+      background: rgba(168,85,61,.88);
+    }
+
+    .thanks-spark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(168,85,61,.55);
+      box-shadow: 0 0 0 10px rgba(168,85,61,.08);
+      animation: sparkPulse 2.8s ease-in-out infinite;
+    }
+
+    .thanks-spark.s1 { left: 25%; top: 22%; }
+    .thanks-spark.s2 { right: 24%; top: 28%; animation-delay: -.9s; }
+    .thanks-spark.s3 { right: 34%; bottom: 20%; animation-delay: -1.8s; }
+
+    @keyframes sparkPulse {
+      0%, 100% { transform: scale(.86); opacity: .42; }
+      50% { transform: scale(1.18); opacity: .86; }
+    }
+
+    .footer { position: fixed; z-index: 20; left: var(--stage-x); right: var(--stage-x); bottom: 28px; display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 14px; font-weight: 820; }
+    .progress { flex: 1; height: 4px; overflow: hidden; border-radius: 999px; background: rgba(31,31,29,.10); }
+    .progress span { display: block; width: var(--progress, 10%); height: 100%; border-radius: inherit; background: var(--clay); transition: width 220ms ease; }
+    .nav { display: flex; gap: 8px; }
+    .nav button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: var(--cream); background: var(--ink); cursor: pointer; font-weight: 950; }
+
+    @media (max-width: 980px) {
+      :root { --stage-top: 44px; --stage-bottom: 96px; --stage-x: 6vw; }
+      .slide { min-width: 0; overflow: auto; }
+      h1 { font-size: 56px; }
+      h2 { font-size: 42px; }
+      .layout-cover .title-block { padding-right: 0; }
+      .cover-atmosphere { width: 280px; height: 280px; opacity: .5; }
+      .stage-mark { position: relative; width: 180px; height: 180px; margin-top: 34px; }
+      .split, .split.reverse, .cards-2, .cards-3, .grid-4, .multi-columns, .compare-2, .timeline-h, .flow, .branch, .tree-level, .pie-wrap, .combo, .problem-solution, .goal-plan, .flow-cards, .subtitle-card-grid, .text-page-clean { grid-template-columns: 1fr; }
+      .icons-grid { grid-template-columns: repeat(2, 1fr); }
+      .table-row { grid-template-columns: 1fr; }
+      .flow-step::after, .timeline-h .phase::before, .flow-arrow { display: none; }
+      .cycle { min-width: 300px; min-height: 300px; width: 300px; height: 300px; }
+      .radial-node { position: static; transform: none !important; margin: 8px; }
+      .radial { display: grid; gap: 12px; }
+      .footer { left: 6vw; right: 6vw; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide layout-cover active">
+      <div class="slide-stage">
+        <div class="cover-atmosphere" aria-hidden="true">
+          <div class="orbit-ring"></div><div class="orbit-ring"></div>
+          <div class="float-glyph one">✦</div><div class="float-glyph two">⌁</div><div class="float-glyph three">◇</div>
+        </div>
+        <header class="title-block">
+          <h1>沙丘色发布会<span class="accent">全量布局模板</span></h1>
+          <p class="meta">覆盖文字、图文、并列、对比、流程、层级、图表、专项主题</p>
+          <div class="author-meta" aria-label="作者和时间">
+            <span class="meta-tag">作者 · Sun</span>
+            <span class="meta-tag">时间 · 2026.05.23</span>
+          </div>
+        </header>
+        <div class="stage-mark" aria-hidden="true"><div class="burst"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span></div></div>
+      </div>
+    </section>
+
+    <section class="slide layout-agenda">
+      <div class="slide-stage split">
+        <header class="title-block"><div class="kicker">Index</div><h2>全篇结构先给观众一张<span class="accent">地图</span></h2><p class="claim">目录页只承担导航，不重复做成内容页。后续每页都是一种可复用布局模式。</p></header>
+        <div class="proof-object agenda-runway">
+          <div class="agenda-row"><strong>01</strong><div><h3>基础通用布局</h3><p>文字、图文、大图、图标文字。</p></div></div>
+          <div class="agenda-row"><strong>02</strong><div><h3>结构表达布局</h3><p>并列、对比、流程、层级。</p></div></div>
+          <div class="agenda-row"><strong>03</strong><div><h3>证据与主题布局</h3><p>图表、结论、问题对策、规划、封底。</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide"><div class="slide-stage text-page-clean"><header class="title-block"><div class="calm-icons"><span>✦</span><span>◇</span><span>⌁</span></div><div class="kicker">Text Only</div><h2>纯文字页：用<span class="title-accent">大标题</span>承载判断</h2><p class="claim">适合观点解释、背景说明、原则声明。页面要像现场讲述，而不是文档摘抄。</p></header><div class="proof-object text-body"><p>一个发布会式文字页不是论文页。它先给强判断，再用少量证据建立可信度。</p><ul class="bullet-list"><li>标题是观众带走的句子。</li><li>正文只解释必要语境。</li><li>要点控制在三条以内。</li></ul></div></div></section>
+
+    <section class="slide"><div class="slide-stage split"><header class="title-block"><div class="kicker">Text + Image</div><h2>图文组合：<span class="title-accent">左文右图</span></h2><p class="claim">适合先讲观点，再让观众看右侧证据或产品画面。</p></header><div class="proof-object image-box" data-label="Product Moment"></div></div></section>
+
+    <section class="slide"><div class="slide-stage split reverse"><div class="proof-object image-box" data-label="Reference"></div><header class="title-block"><div class="kicker">Image + Text</div><h2>图文组合：<span class="title-accent">左图右文</span></h2><p class="claim">适合从画面进入叙事，右侧负责解释意义和下一步判断。</p></header></div></section>
+
+    <section class="slide"><div class="slide-stage stack-vertical"><div class="image-box" data-label="Scene" style="min-height:280px"></div><header class="title-block"><div class="kicker">Top Image</div><h2>图文组合：上图下文</h2><p class="claim">适合先给大场景，再用一句话收束图片背后的含义。</p></header></div></section>
+
+    <section class="slide"><div class="slide-stage stack-vertical"><header class="title-block"><div class="kicker">Bottom Image</div><h2>图文组合：下图上文</h2><p class="claim">适合先提出结论，再用下方宽图作为证据展开。</p></header><div class="proof-object image-box" data-label="Proof" style="min-height:300px"></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><div class="full-image"><div class="kicker">Full Image</div><h2>单大图页：让一张图成为<span class="title-accent">全场记忆点</span></h2><p class="claim">只保留少量标题文案，避免把大图降级成背景装饰。</p></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Icons</div><h2>图标文字页：短句负责解释，图标负责停顿</h2></header><div class="proof-object icons-grid"><div class="icon-item"><div class="icon-symbol">✦</div><h3>判断</h3><p>先给结论。</p></div><div class="icon-item"><div class="icon-symbol">⌁</div><h3>结构</h3><p>组织讲述路径。</p></div><div class="icon-item"><div class="icon-symbol">◇</div><h3>证据</h3><p>放大关键材料。</p></div><div class="icon-item"><div class="icon-symbol">●</div><h3>收束</h3><p>留下行动方向。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Two Cards</div><h2>双卡片布局：两种对象<span class="title-accent">对等展示</span></h2></header><div class="proof-object cards-2"><div class="card panel"><div class="num">01</div><div><h3>业务视角</h3><p>用业务语言解释价值、风险和结果。</p></div></div><div class="card panel"><div class="num">02</div><div><h3>技术视角</h3><p>用系统语言解释机制、边界和路径。</p></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Three Cards</div><h2>三卡片布局：三个并列支点支撑一个<span class="title-accent">判断</span></h2></header><div class="proof-object cards-3"><div class="card panel"><div class="num">01</div><div><h3>输入</h3><p>材料、目标、约束。</p></div></div><div class="card panel"><div class="num">02</div><div><h3>决策</h3><p>风格、版式、叙事。</p></div></div><div class="card panel"><div class="num">03</div><div><h3>输出</h3><p>页面、动效、校验。</p></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Grid</div><h2>四宫格布局：四块内容规整排布</h2></header><div class="proof-object grid-4"><div class="card panel"><div class="num">A</div><h3>标题层级</h3></div><div class="card panel"><div class="num">B</div><h3>色彩规则</h3></div><div class="card panel"><div class="num">C</div><h3>组件语法</h3></div><div class="card panel"><div class="num">D</div><h3>质量检查</h3></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Multi Column</div><h2>多列列表：纵向多栏信息罗列</h2></header><div class="proof-object multi-columns"><div class="column-list"><h3>场景</h3><p>发布会</p><p>路演</p><p>内部宣讲</p></div><div class="column-list"><h3>内容</h3><p>观点</p><p>证据</p><p>路径</p></div><div class="column-list"><h3>输出</h3><p>HTML</p><p>组件</p><p>规范</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Compare</div><h2>左右对比页：两项内容<span class="title-accent">差异对照</span></h2></header><div class="proof-object compare-2"><div class="compare-panel panel"><div class="label">Option A</div><h3>传统汇报</h3><p>信息完整，但现场注意力分散。</p></div><div class="compare-panel hot panel"><div class="label">Option B</div><h3>发布会表达</h3><p>信息更少，但重点更强、节奏更稳。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Pros / Cons</div><h2>优劣对比页：优势和短板分项比对</h2></header><div class="proof-object compare-2"><div class="compare-panel hot panel"><div class="label">Strength</div><h3>优势</h3><p>视觉统一、节奏强、适合现场表达。</p></div><div class="compare-panel panel"><div class="label">Risk</div><h3>短板</h3><p>不适合承载过多细节，需要配合讲稿或附录。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Before / After</div><h2>新旧 / 前后对比：展示状态更替</h2></header><div class="proof-object compare-2"><div class="compare-panel panel"><div class="label">Before</div><h3>把内容排进去</h3><p>模型只是在做页面填空。</p></div><div class="compare-panel hot panel"><div class="label">After</div><h3>把观点讲出来</h3><p>模型开始理解叙事、舞台和观众。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Matrix</div><h2>多维对比：多维度指标横向比对</h2></header><div class="proof-object table"><div class="table-row"><div class="table-cell head">维度</div><div class="table-cell head">普通生成</div><div class="table-cell head">模板生成</div><div class="table-cell head">发布会技能</div></div><div class="table-row"><div class="table-cell head">重点</div><div class="table-cell">内容覆盖</div><div class="table-cell">样式统一</div><div class="table-cell hot">现场记忆</div></div><div class="table-row"><div class="table-cell head">布局</div><div class="table-cell">随机</div><div class="table-cell">固定</div><div class="table-cell hot">按场景决策</div></div><div class="table-row"><div class="table-cell head">质量</div><div class="table-cell">不稳定</div><div class="table-cell">中等</div><div class="table-cell hot">可 QA</div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Timeline</div><h2>横向时间轴：事件按时间<span class="title-accent">先后排布</span></h2></header><div class="proof-object timeline-h"><div class="phase"><time>Now</time><h3>风格锁定</h3><p>建立视觉系统。</p></div><div class="phase"><time>Next</time><h3>布局路由</h3><p>按内容选页型。</p></div><div class="phase"><time>Soon</time><h3>质量校验</h3><p>检查投影可读。</p></div><div class="phase"><time>Future</time><h3>多风格扩展</h3><p>形成技能库。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Vertical Timeline</div><h2>纵向时间轴：阶段进程竖向展示</h2></header><div class="proof-object timeline-v"><div class="v-step"><div class="v-dot">1</div><div><h3>提出问题</h3><p>为什么普通生成不适合现场宣讲。</p></div></div><div class="v-step"><div class="v-dot">2</div><div><h3>建立规则</h3><p>把页面类型和叙事任务对应起来。</p></div></div><div class="v-step"><div class="v-dot">3</div><div><h3>沉淀技能</h3><p>让 Claude Code 可以稳定复用。</p></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Steps</div><h2>步骤流程图：分步操作、<span class="title-accent">执行流程</span></h2></header><div class="proof-object flow"><div class="flow-step panel"><strong>1</strong><h3>理解</h3><p>识别目标和受众。</p></div><div class="flow-step panel"><strong>2</strong><h3>拆页</h3><p>一页一个判断。</p></div><div class="flow-step panel"><strong>3</strong><h3>选型</h3><p>选择布局模式。</p></div><div class="flow-step panel"><strong>4</strong><h3>生成</h3><p>输出 HTML 页面。</p></div><div class="flow-step panel"><strong>5</strong><h3>校验</h3><p>检查溢出和节奏。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage split"><header class="title-block"><div class="kicker">Cycle</div><h2>循环闭环图：往复循环类内容</h2><p class="claim">适合表达持续优化、反馈闭环、运营飞轮。</p></header><div class="proof-object cycle"><div class="cycle-core">持续迭代</div><div class="cycle-node n1">生成</div><div class="cycle-node n2">演示</div><div class="cycle-node n3">反馈</div><div class="cycle-node n4">沉淀</div></div></div></section>
+
+    <section class="slide"><div class="slide-stage branch"><header class="title-block"><div class="kicker">Main + Branches</div><div class="branch-main">总分结构页</div><p class="claim">先给总观点，再分出几个支撑分支。</p></header><div class="proof-object branch-list"><div class="branch-item panel"><h3>分支一：视觉统一</h3><p>用颜色、字体和留白建立识别度。</p></div><div class="branch-item panel"><h3>分支二：叙事清晰</h3><p>用页面类型承载不同表达任务。</p></div><div class="branch-item panel"><h3>分支三：质量可控</h3><p>用规则和 QA 避免随机感。</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Tree</div><h2>层级树状页：从属、上下级关系</h2></header><div class="proof-object tree"><div class="tree-root">HTML PPT Skill</div><div class="tree-level"><div class="tree-node">风格系统</div><div class="tree-node">布局路由</div><div class="tree-node">质量校验</div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Radial</div><h2>中心辐射页：核心内容向外延伸</h2></header><div class="proof-object radial"><div class="radial-core">布局决策器</div><div class="radial-node r1">封面</div><div class="radial-node r2">对比</div><div class="radial-node r3">图表</div><div class="radial-node r4">流程</div><div class="radial-node r5">结尾</div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Nested</div><h2>嵌套层级页：包含归属关系展示</h2></header><div class="proof-object nested"><div class="nest-box"><h3>一套发布会技能</h3><div class="nest-inner"><h3>包含三类资产</h3><div class="nest-grid"><div>风格 Token</div><div>布局模板</div><div>QA 规则</div></div></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Bar Chart</div><h2>柱状图页：数据<span class="title-accent">高低对比</span></h2></header><div class="proof-object chart-card panel"><div class="bars"><div class="bar" style="height:42%"><span>A</span></div><div class="bar" style="height:56%"><span>B</span></div><div class="bar hot" style="height:86%"><span>C</span></div><div class="bar" style="height:64%"><span>D</span></div><div class="bar" style="height:72%"><span>E</span></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Pie Chart</div><h2>饼图页：占比份额展示</h2></header><div class="proof-object pie-wrap"><div class="pie"></div><div class="legend"><p><strong>46%</strong> 观点判断</p><p><strong>26%</strong> 证据展示</p><p><strong>28%</strong> 节奏和收束</p></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Line Chart</div><h2>折线图页：趋势变化呈现</h2></header><div class="proof-object line-chart panel"><svg viewBox="0 0 900 300" role="img" aria-label="趋势线"><polyline points="20,240 190,210 360,178 530,124 700,84 880,48" fill="none" stroke="#a8553d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="20,258 190,246 360,230 530,214 700,196 880,182" fill="none" stroke="rgba(31,31,29,.18)" stroke-width="5" stroke-linecap="round"/><g fill="#a8553d"><circle cx="20" cy="240" r="9"/><circle cx="190" cy="210" r="9"/><circle cx="360" cy="178" r="9"/><circle cx="530" cy="124" r="9"/><circle cx="700" cy="84" r="9"/><circle cx="880" cy="48" r="9"/></g></svg><div class="axis-labels"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Combo Chart</div><h2>组合图表页：多类数据融合展示</h2></header><div class="proof-object combo"><div class="chart-card panel"><div class="mini-bars"><div class="bar" style="height:45%"></div><div class="bar hot" style="height:80%"></div><div class="bar" style="height:62%"></div><div class="bar" style="height:70%"></div></div></div><div class="chart-card panel mini-line"><svg viewBox="0 0 420 220"><polyline points="20,170 100,138 180,150 260,88 340,64 400,42" fill="none" stroke="#a8553d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage statement-stage"><div class="calm-icons"><span>✦</span><span>◇</span><span>⌁</span></div><header class="title-block"><div class="kicker">Conclusion</div><h2>观点结论页：让观众带走唯一一句<span class="accent">核心看法</span></h2><p class="claim">适合章节收束、观点升维、关键转折。</p><div class="statement-rule"></div></header></div></section>
+
+    <section class="slide"><div class="slide-stage"><header class="title-block"><div class="kicker">Problem / Solution</div><h2>问题对策页：问题对应<span class="title-accent">解决方案</span></h2></header><div class="proof-object problem-solution"><div class="ps-row"><div class="ps-item panel"><h3>问题 01</h3><p>页面像网页，缺少发布会舞台感。</p></div><div class="ps-item panel"><h3>问题 02</h3><p>内容堆叠，观众抓不到重点。</p></div></div><div class="ps-row"><div class="ps-item panel"><h3>对策 01</h3><p>建立 16:9 舞台安全区和主视觉规则。</p></div><div class="ps-item panel"><h3>对策 02</h3><p>使用内容类型到布局模板的路由。</p></div></div></div></div></section>
+
+    <section class="slide"><div class="slide-stage goal-plan"><header class="title-block"><div class="kicker">Goal Plan</div><div class="goal-number">90</div><h2>目标规划页：既定目标 + <span class="title-accent">落地计划</span></h2></header><div class="proof-object plan-list"><div class="plan-item"><strong>01</strong><p>完成布局模板库，覆盖主要表达场景。</p></div><div class="plan-item"><strong>02</strong><p>沉淀 Claude Code 可执行的生成规则。</p></div><div class="plan-item"><strong>03</strong><p>增加自动 QA，避免溢出、重复和低可读性。</p></div></div></div></section>
+
+
+    <section class="slide layout-subtitle-band">
+      <div class="slide-stage">
+        <header class="title-block">
+          <div class="kicker">Subtitle Band</div>
+          <h2>思考比<span class="title-accent">执行</span>更重要</h2>
+          <div class="subtitle-band"><strong>技术模式变革期：</strong>短时间内都会陷入技术的自嗨和自卑的纠缠中。需要冷静思考更重要，思考比执行更重要。</div>
+        </header>
+        <div class="proof-object subtitle-card-grid">
+          <div class="card panel"><div class="num">01</div><div><h3>拒绝自嗨</h3><p>不盲目追逐技术热点，回归业务本质。</p></div></div>
+          <div class="card panel colored-card"><div class="num">02</div><div><h3>克服自卑</h3><p>不畏惧技术变革，找到自身定位与价值。</p></div></div>
+          <div class="card panel"><div class="num">03</div><div><h3>冷静洞察</h3><p>在变革中找到自己的定位，做正确的事。</p></div></div>
+        </div>
+        <div class="bottom-conclusion">在 AI 智能体时代，<strong>架构师的价值不在于写代码，而在于理解业务、定义问题、设计正确的解决方案。</strong></div>
+      </div>
+    </section>
+
+    <section class="slide layout-delivery-flow">
+      <div class="slide-stage">
+        <header class="title-block">
+          <div class="kicker">Delivery Mode</div>
+          <h2>未来业务研发<span class="title-accent">交付模式转变</span></h2>
+        </header>
+        <div class="proof-object flow-cards">
+          <div class="delivery-card panel">
+            <div class="role">01 · 用户侧</div>
+            <h3>描述与定义需求</h3>
+            <p>用户用自然语言描述业务需求。</p>
+            <div class="chips"><span class="chip">WORD</span><span class="chip">EXCEL</span><span class="chip">TXT</span><span class="chip">MD</span></div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="delivery-card panel colored-card">
+            <div class="role">02 · FDE 工程师</div>
+            <h3>AI 方案封装</h3>
+            <p>将需求转化为 AI 可执行的方案。</p>
+            <div class="chips"><span class="chip">Skill</span><span class="chip">CLI</span><span class="chip">MCP</span><span class="chip">Prompt</span><span class="chip">Plugin</span></div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="delivery-card panel">
+            <div class="role">03 · 智能体</div>
+            <h3>装载与 UI 封装</h3>
+            <p>智能体执行并呈现最终结果。</p>
+            <div class="chips"><span class="chip">Claude Code</span><span class="chip">LangChain</span><span class="chip">Codex</span></div>
+          </div>
+        </div>
+        <div class="bottom-conclusion"><strong>角色转变：</strong>FDE 工程师成为业务与 AI 之间的翻译者和封装者。</div>
+      </div>
+    </section>
+
+    <section class="slide"><div class="slide-stage thanks"><div class="thanks-orbit" aria-hidden="true"></div><div class="calm-icons"><span>✦</span><span>◇</span><span>⌁</span></div><span class="thanks-spark s1" aria-hidden="true"></span><span class="thanks-spark s2" aria-hidden="true"></span><span class="thanks-spark s3" aria-hidden="true"></span><header class="title-block"><div class="thanks-mark" aria-hidden="true"><div class="burst"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span></div></div><div class="kicker">Thank You</div><h2>致谢封底页</h2><p class="claim">好的模板库不是让页面变多，而是让每一种表达都有正确的舞台。</p><div class="statement-rule"></div><div class="author-meta" aria-label="作者和时间"><span class="meta-tag">作者 · Sun</span><span class="meta-tag">时间 · 2026.05.23</span></div></header></div></section>
+  </main>
+
+  <footer class="footer"><span id="pageText">01 / 35</span><div class="progress" aria-hidden="true"><span id="progressBar"></span></div><div class="nav" aria-label="slide navigation"><button type="button" id="prevBtn" aria-label="上一页">‹</button><button type="button" id="nextBtn" aria-label="下一页">›</button></div></footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const pageText = document.querySelector('#pageText');
+    const progressBar = document.querySelector('#progressBar');
+    let index = 0;
+    function showSlide(nextIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      pageText.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      progressBar.style.setProperty('--progress', `${((index + 1) / slides.length) * 100}%`);
+    }
+    document.querySelector('#prevBtn').addEventListener('click', () => showSlide(index - 1));
+    document.querySelector('#nextBtn').addEventListener('click', () => showSlide(index + 1));
+    window.addEventListener('keydown', (event) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(event.key)) showSlide(index + 1);
+      if (['ArrowLeft', 'PageUp'].includes(event.key)) showSlide(index - 1);
+      if (event.key.toLowerCase() === 'f') document.documentElement.requestFullscreen?.();
+    });
+    showSlide(0);
+  </script>
+</body>
+</html>

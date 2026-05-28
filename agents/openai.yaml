@@ -1,4 +1,4 @@
 display_name: Dune Keynote Slide
-short_description: 生成沙丘色高端发布会 HTML PPT
+short_description: 生成高端 HTML PPT，必须通过 sources/ + merge_deck.py 标准模板产出
 brand_color: '#a8553d'
-default_prompt: Use $dune-keynote-slide to create a high-end dune-color keynote-style HTML deck.
+default_prompt: Use $dune-keynote-slide to create a high-end HTML keynote deck. Do not hand-write a standalone HTML file. First create modular files under sources/, run scripts/merge_deck.py, validate with scripts/validate_deck_contract.py, and deliver only the merged index.html with canonical runtime, overview, edit toolbar, footer controls, and selected stylePack.

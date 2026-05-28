@@ -14,12 +14,12 @@ All layouts below are slide-source patterns only. They must be placed inside the
 
 ## Foundation
 
-- `cover`: giant title, author/time tags, faint animated cover mark.
+- `cover`: giant left title, author/time tags, upper-right orbit, lower-right burst mark matching `dune-sample-deck.html`.
 - `agenda-index`: 3-5 chapter rows only; do not reuse as content page.
 - `text-only`: title + clean text panel; split if body exceeds 120 Chinese characters.
 - `statement`: centered title, centered claim, centered clay rule.
 - `cinematic-section`: numbered chapter divider only; no cards, no list, no table, no diagram, no proof object.
-- `closing`: centered all text, author/time tags, animated mark echoing cover.
+- `closing`: mandatory final page with centered "感谢 / Thank You", `thanks-mark`, author/time/logo tags, and animation echoing cover.
 
 ## Capacity Gate
 
@@ -157,7 +157,7 @@ Apply these before merging:
 
 Use cinematic section pages for chapter dividers and one-sentence theme pages.
 
-- Add a low-opacity chapter number as a left-side mark: `.section-ghost-number` with `01`, `02`, etc.
+- Add a low-opacity chapter number as a left-side mark: `.section-ghost-number` with `01`, `02`, etc. Keep it about half the height of the section title block, not a giant background number.
 - Section title should be very large: `clamp(62px, min(7.2vw, 12vh), 106px)`.
 - Keep the section title on one line when possible. If it must wrap, allow at most one line break.
 - Subtitle/claim should have at most one `<br>`; shorten or split if it becomes three lines.
@@ -180,9 +180,9 @@ Cover atmosphere and mark must stay inside the 16:9 safe stage.
 For cinematic section pages, use the chapter number as a left-side mark, not as a ghost layer under the text.
 
 - Place the number to the left of the title group in the same visual row.
-- Reduce the number size by roughly 30% compared with a full-background ghost number.
+- Reduce the number size by roughly 50% compared with a full-background ghost number.
 - Use `rgba(168,85,61,.18-.22)` so the number is visible but still secondary.
-- Keep a moderate gap between number and title: `28-56px`.
+- Keep a moderate gap between number and title: `22-42px`.
 - Align kicker, title, subtitle, and rule as one text group to the right of the number.
 - On mobile/narrow viewports, stack number above and center the text group.
 
@@ -218,37 +218,70 @@ Recommended default:
 ```css
 .layout-cover .stage-mark {
   position: absolute;
-  right: clamp(140px, 9.5vw, 230px);
-  bottom: clamp(132px, 16vh, 214px);
-  width: clamp(150px, 12vw, 210px);
-  height: clamp(150px, 12vw, 210px);
+  right: 2%;
+  bottom: 2%;
+  width: clamp(210px, 23vw, 300px);
+  height: clamp(210px, 23vw, 300px);
 }
 ```
 
-The visual bottom of `.stage-mark` should align near the lower-right open area of the cover, never on top of the large title. It must stay inside `<section class="slide layout-cover">`; do not use `position: fixed` or negative right offsets for cover marks.
+The visual bottom of `.stage-mark` should sit in the lower-right open area of the cover, like `dune-sample-deck.html`, never at the top and never on top of the large title. It must stay inside `<section class="slide layout-cover">`; do not use `position: fixed` or negative right offsets for cover marks.
 
 The upper-right orbit `.cover-atmosphere` should sit to the right of the title group without covering text:
 
 ```css
 .layout-cover .cover-atmosphere {
   position: absolute;
-  right: clamp(34px, 3.6vw, 84px);
-  top: clamp(92px, 12vh, 150px);
-  width: clamp(330px, 31vw, 520px);
-  height: clamp(330px, 31vw, 520px);
+  inset: -6vh -4vw auto auto;
+  width: min(50vw, 640px);
+  height: min(50vw, 640px);
   opacity: .34;
 }
 ```
 
 When the title is very wide, remove or reduce `.layout-cover .title-block` right padding rather than letting the stage mark overlap the headline.
 
+## Image Text Balance
+
+For split image/text slides, the text side must read as equal in importance to the image side.
+
+- Use `.split` or `.split.reverse`, not tiny body text beside a large image.
+- Text-side title should stay around `46-76px` on desktop and should not shrink below `36px` on 13-inch laptops.
+- Text-side claim/body should stay around `20-28px`; if more explanation is needed, split the slide.
+- Image panels may be visually dominant, but not more than roughly 55-60% of the perceived composition unless the slide is a single-image page.
+
 ## Projection Safe Area Rules
 
 All slides must preserve a visible 16:9 safe area in both normal mode and overview thumbnails.
 
+- Target responsive baseline: design for presentation laptops, not phones. The smallest expected useful canvas is `1366x768`, with a stricter fallback check at `1280x720`.
+- Pages must not require browser zoom-out. If a slide looks correct only at `80%` browser zoom, the layout is too dense and must be split or compressed by layout rules.
+- Do not convert keynote compositions into mobile-style stacked pages just to support extremely narrow windows. If content does not fit at `1280x720`, split the slide.
 - Keep top safe padding around `60-92px` and bottom safe padding around `104-148px` on desktop projection.
 - The proof object should usually start `20-34px` below the title block. Dense pages may use `14-24px`, but never `0`.
 - Long lists: more than 5 rows become two balanced columns. More than 8 rows should be split into two slides unless the text is very short.
 - Dense stacks: use compact vertical rhythm, not smaller unreadable text. Prefer reducing gaps, padding, and conclusion bands before shrinking body below `14px`.
 - Conclusion bands should be compact (`14-20px` padding) on dense slides and should not sit on top of the footer.
 - Footer progress should be 2px high, low opacity, and close to the bottom edge. Navigation buttons should use light translucent styling instead of solid dark circles.
+
+## Cover Anchor Rule
+
+The cover motion marks are anchored to the title composition, not to the viewport corners.
+
+- The title block occupies the left/main column.
+- `.stage-mark` sits in the lower-right of the title-block composition area, visually aligned with the bottom of the title/meta group.
+- `.cover-atmosphere` sits in the upper-right as a pale background icon/orbit.
+- Do not place the main icon at the very top, outside the stage, or in a random page corner.
+
+## Laptop Capacity Routing
+
+Use this pass before writing source slides. It prevents good-looking large-screen pages from collapsing on 13-inch laptops.
+
+- Cover: title may use at most two lines; if the title is longer, shorten the displayed title and move context into the subtitle.
+- Agenda: 3-5 rows are single-column; 6 rows should become two columns; more than 6 rows should split into a chapter overview plus detailed agenda.
+- Cinematic section: title + one subtitle only. Never place cards, bullets, proof objects, or architecture content below the chapter title.
+- Three-card pages: each card should carry one headline and 1-2 short support lines. If a card needs bullets, split or use `problem-solution`.
+- Flow pages: 3 steps should become a large runway; 4-5 steps can use horizontal flow. More than 5 steps should split into timeline or two pages.
+- Data pages: one chart protagonist only. If a chart needs a table plus interpretation, split into chart page + conclusion page.
+- Dense technical pages: use `system-map`, `case-transform`, `comparison-matrix`, or split. Do not solve density by shrinking labels below `14px`.
+- Closing: final page is mandatory, all text is centered, title is large, and no `statement-rule` is used.

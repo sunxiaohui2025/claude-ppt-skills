@@ -1,3 +1,4 @@
+const DUNE_KEYNOTE_RUNTIME_VERSION = '2026-05-28-stylepack-runtime-v2';
 const slides = Array.from(document.querySelectorAll('.slide'));
 const pageText = document.querySelector('#pageText');
 const progressBar = document.querySelector('#progressBar');
@@ -6,6 +7,7 @@ const overviewGrid = document.querySelector('#overviewGrid');
 const editorToast = document.querySelector('#editorToast');
 const editToolbar = document.querySelector('#editToolbar');
 const editTargetLabel = document.querySelector('#editTargetLabel');
+const deckStyleClass = Array.from(document.body.classList).find((name) => name.startsWith('style-')) || '';
 let index = 0;
 let editing = false;
 let selectedEditElement = null;
@@ -13,28 +15,40 @@ let dragState = null;
 let deckDirectoryHandle = null;
 let htmlFileHandle = null;
 let savedTextRange = null;
-function toast(message) { editorToast.textContent = message; editorToast.classList.add('active'); clearTimeout(toast.timer); toast.timer = setTimeout(() => editorToast.classList.remove('active'), 3000); }
-function showSlide(nextIndex) { index = Math.max(0, Math.min(slides.length - 1, nextIndex)); slides.forEach((slide, i) => slide.classList.toggle('active', i === index)); pageText.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`; progressBar.style.setProperty('--progress', `${((index + 1) / slides.length) * 100}%`); clearSelection(); }
-function toggleOverview(force) { const active = force ?? !overview.classList.contains('active'); overview.classList.toggle('active', active); overview.setAttribute('aria-hidden', String(!active)); if (active) buildOverview(); }
+function toast(message) { if (!editorToast) return; editorToast.textContent = message; editorToast.classList.add('active'); clearTimeout(toast.timer); toast.timer = setTimeout(() => editorToast.classList.remove('active'), 3000); }
+function showSlide(nextIndex) {
+  if (!slides.length) return;
+  index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+  slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+  if (pageText) pageText.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+  progressBar?.style.setProperty('--progress', `${((index + 1) / slides.length) * 100}%`);
+  clearSelection();
+}
+function toggleOverview(force) { if (!overview || !overviewGrid) return; const active = force ?? !overview.classList.contains('active'); overview.classList.toggle('active', active); overview.setAttribute('aria-hidden', String(!active)); if (active) buildOverview(); }
 function buildOverview() {
+  if (!overviewGrid) return;
   overviewGrid.innerHTML = '';
   slides.forEach((slide, i) => {
     const card = document.createElement('button');
     card.className = 'overview-card';
     card.type = 'button';
     const iframe = document.createElement('iframe');
-    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}:root{--stage-top:58px;--stage-bottom:92px;--stage-x:90px}.slide{display:grid!important;position:relative!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important}.slide-stage{transform:none}</style></head><body>${slide.outerHTML}</body></html>`;
+    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}html,body{width:1280px!important;height:720px!important;margin:0!important;overflow:hidden!important}.deck{width:1280px!important;height:720px!important}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}:root{--stage-top:58px;--stage-bottom:92px;--stage-x:90px}.slide{display:grid!important;position:relative!important;inset:auto!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;padding:var(--stage-top) var(--stage-x) var(--stage-bottom)!important}.slide-stage{transform:none}</style></head><body class="${deckStyleClass}"><main class="deck">${slide.outerHTML}</main></body></html>`;
     iframe.srcdoc = html;
     const label = document.createElement('span');
     label.textContent = `${i + 1}/${slides.length}`;
     card.append(iframe, label);
     card.addEventListener('click', () => { showSlide(i); toggleOverview(false); });
     overviewGrid.appendChild(card);
-    requestAnimationFrame(() => {
+    const fitPreview = () => {
       const rect = card.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
       const scale = Math.max(rect.width / 1280, rect.height / 720);
       card.style.setProperty('--preview-scale', String(scale));
-    });
+    };
+    requestAnimationFrame(fitPreview);
+    iframe.addEventListener('load', fitPreview, { once: true });
+    if ('ResizeObserver' in window) new ResizeObserver(fitPreview).observe(card);
   });
 }
 function textCandidates() { return 'h1,h2,h3,p,li,.claim,.kicker,.meta-tag,.reuse-tag,.chip,.label,.card-title,.grid-title,.hub-node-title'; }
@@ -297,8 +311,8 @@ function currentFullHtml() { const clone = document.documentElement.cloneNode(tr
 function currentSlideHtml() { const clone = slides[index].cloneNode(true); clone.classList.remove('active'); clone.querySelectorAll('.edit-selected').forEach((node) => node.classList.remove('edit-selected')); clone.querySelectorAll('[contenteditable]').forEach((node) => node.removeAttribute('contenteditable')); return clone.outerHTML; }
 async function saveFullHtmlFile() { if (!('showSaveFilePicker' in window)) return false; try { if (!htmlFileHandle) htmlFileHandle = await window.showSaveFilePicker({ suggestedName: (document.title || 'deck') + '-edited.html', types: [{ description: 'HTML deck', accept: { 'text/html': ['.html'] } }] }); const writable = await htmlFileHandle.createWritable(); await writable.write(currentFullHtml()); await writable.close(); return true; } catch (error) { console.warn('Full HTML save failed:', error); return false; } }
 async function saveCurrentSlide() { const slide = slides[index]; const source = slide?.dataset.source; if (!source) return toast('当前页缺少 data-source，无法保存。'); const html = currentSlideHtml(); if (await tryServerSave(source, html)) return toast(`已通过本地服务保存 ${source}`); if (await tryFileSystemAccessSave(source, html)) return toast(`已保存到源文件 ${source}`); if (await saveFullHtmlFile()) return toast('未找到源文件，已保存为完整 HTML 文件。'); toast('保存失败：请选择包含 sources/ 的 deck 文件夹，或使用 Chrome/Edge 另存完整 HTML。'); }
-document.querySelector('#prevBtn').addEventListener('click', () => showSlide(index - 1));
-document.querySelector('#nextBtn').addEventListener('click', () => showSlide(index + 1));
+document.querySelector('#prevBtn')?.addEventListener('click', () => showSlide(index - 1));
+document.querySelector('#nextBtn')?.addEventListener('click', () => showSlide(index + 1));
 window.addEventListener('keydown', (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') { event.preventDefault(); saveCurrentSlide(); return; }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'b') { event.preventDefault(); toggleBold(); return; }
@@ -312,7 +326,7 @@ window.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowRight') moveSelected(step, 0);
     return;
   }
-  if (event.key === 'Escape') { if (editing) setEditing(false); if (overview.classList.contains('active')) toggleOverview(false); if (document.fullscreenElement) document.exitFullscreen?.(); return; }
+  if (event.key === 'Escape') { if (editing) setEditing(false); if (overview?.classList.contains('active')) toggleOverview(false); if (document.fullscreenElement) document.exitFullscreen?.(); return; }
   if (editing) return;
   if (['ArrowRight', 'PageDown', ' '].includes(event.key)) showSlide(index + 1);
   if (['ArrowLeft', 'PageUp'].includes(event.key)) showSlide(index - 1);
