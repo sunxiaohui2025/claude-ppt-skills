@@ -27,11 +27,11 @@ Estimate slide capacity before writing HTML. Split first; shrink second.
 
 - Count rough text length before choosing a layout. A page that is semantically correct but visually overfilled is still wrong.
 - Cards should have comparable text weight. If one card is more than 1.5x longer than its siblings, shorten it, split the card group, or choose a comparison/problem-solution layout.
-- Four cards must stay in one designed row only when each card is very short. If the fourth card wraps to a new row in a 13-inch viewport, reduce text first; if still crowded, use a 2x2 `grid-4`.
+- Four cards must never appear as an orphan wrapped card. If using `flow-cards` with four stages, use the four-card variant without visible arrows, or switch to `grid-4` when text is longer.
 - For `cards-3`, keep support text around 16-28 Chinese characters per card. For `flow-cards`, keep support text around 20-34 Chinese characters. For `compare-2`, keep each panel under 48 Chinese characters unless it is the only proof object on the page.
 - Numbered section pages are not content pages. If a page has `.section-ghost-number`, it must not contain `.proof-object`, cards, layers, tables, timelines, charts, or lists.
 - A section page may contain only: kicker, section number, title, one short subtitle/claim, and low-opacity ambient icons.
-- If a numbered section title exceeds about 10-12 Chinese characters, insert one deliberate `<br>` at a semantic pause. Do not let a chapter title run as one long line beyond the right edge.
+- Only insert `<br>` in numbered section titles when the title would genuinely overflow the stage. Do not split short titles just for symmetry; if it is only over by 1-2 characters, keep one line and let CSS size/width handle it.
 - If section context needs examples, architecture, scenarios, or bullets, create the next slide as the content slide.
 - A normal content slide should have one protagonist proof object. If it needs both a chapter title and a proof object, split into `cinematic-section` + content layout.
 - Five-layer stacks, four-card grids, and long roadmaps often need their own page. Do not attach them under a chapter divider.
@@ -52,8 +52,8 @@ The old `dune-sample-deck.html` layout library has been folded into these requir
 
 ## Visual
 
-- `text-image-right`: left title/claim, right large visual.
-- `image-text-right`: left visual, right title/claim.
+- `text-image-right`: left title/claim, right large 16:9 visual.
+- `image-text-right`: left large 16:9 visual, right title/claim.
 - `image-top-text-bottom`: wide visual above concise explanation.
 - `text-top-image-bottom`: concise claim above wide visual.
 - `full-image`: large visual surface with minimal overlay text.
@@ -128,7 +128,7 @@ Review every slide for layout-content fit:
 - If a numbered section page contains a proof object, split it immediately. The section page keeps only chapter number/title/subtitle; the proof object moves to the next page.
 - If any slide's content visually approaches the top or bottom edge, compress the proof object, split the slide, or switch to a two-column structure. Never let content touch the viewport edge in overview thumbnails.
 - If any card row wraps unexpectedly, treat it as a failed layout. Use shorter text, smaller secondary text, or switch to `grid-4`; do not accept an orphan card on a second row.
-- If image/text slides produce too many text line breaks, rebalance the split: give the text column enough width, shorten the claim, or split the explanation into the next slide. The image can be large, but the text side cannot become a narrow caption column.
+- If image/text slides produce too many text line breaks, rebalance the split: keep the visual close to 16:9 and large, give the text column enough width, shorten the claim, or split the explanation into the next slide. The image can be large, but the text side cannot become a narrow caption column.
 - If an agenda/list has more than 5 rows, use a balanced two-column list instead of a single tall list.
 - If a layer stack, architecture stack, quote + conclusion, or three-card page exceeds the safe stage height, reduce vertical gaps, card padding, list line-height, and conclusion-band height before reducing title hierarchy.
 - Footer controls must stay visually quiet; they should never compete with content or look like a decorative bottom bar.
@@ -157,6 +157,7 @@ Apply these before merging:
 
 - Except cover pages, primary `h2` titles should be larger: `clamp(50px, min(5.7vw, 9.6vh), 82px)` unless the slide is dense technical content.
 - `statement`, `closing`, and `thanks` pages must center the full title block: kicker, h2, claim, rule, author tags.
+- One-sentence statement pages without `.section-ghost-number` should use chapter-scale h2 sizing and must highlight one key phrase inside the h2 with `.title-accent` or `.accent`.
 - Centering a parent grid is not enough; set `h2 { margin-left:auto; margin-right:auto; text-align:center; }` for centered pages.
 - Normal content pages default to left alignment for title, claim, and subtitle. Do not center subtitles in `main-branches`, `cards`, `case-transform`, `system-map`, or `timeline` unless explicitly requested.
 - Avoid inline `text-align:center` on claims except statement/closing pages.
@@ -167,12 +168,13 @@ Use cinematic section pages for chapter dividers and one-sentence theme pages.
 
 - Add a low-opacity chapter number as a left-side mark: `.section-ghost-number` with `01`, `02`, etc. Keep it about half the height of the section title block, not a giant background number.
 - Section title should be very large: `clamp(62px, min(7.2vw, 12vh), 106px)`.
-- Keep the section title on one line only when it is short. For Chinese titles longer than about 10-12 characters, insert one semantic `<br>` and balance the two lines.
+- Keep the section title on one line when it fits. Only add one semantic `<br>` for genuinely long Chinese titles, usually above about 18 characters or when render checking shows overflow.
 - Subtitle/claim should have at most one `<br>`; shorten or split if it becomes three lines.
 - Use low-opacity ambient icons only; do not let glyphs compete with the title.
 - Do not use ordinary small statement pages for chapter dividers; use the left-side number + large title composition.
 - Do not add `<div class="statement-rule"></div>` under numbered chapter titles. Chapter pages should stay clean and rely on number, title, subtitle, and faint ambient icons.
 - For one-line statement or major viewpoint pages that are not chapter dividers, keep the centered `statement-rule` as a deliberate pause and emphasis device.
+- These one-line statement pages must not be visually smaller than chapter pages; keep their h2 at chapter-title scale while preserving the centered composition.
 
 ## Cover Motion Positioning
 

@@ -2,7 +2,6 @@
 .env
 
 decks/*
-scripts/**/__pycache__/
 backend/.env
 
 

@@ -242,10 +242,10 @@ def validate_deck(target_path: str) -> dict:
             h2_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", section_html, flags=re.S | re.I)
             if h2_match:
                 h2_html = h2_match.group(1)
-                if chinese_char_count(plain_text(h2_html)) > 12 and "<br" not in h2_html.lower():
+                if chinese_char_count(plain_text(h2_html)) > 18 and "<br" not in h2_html.lower():
                     raise ValueError(
                         f"slide {i} chapter title is too long without a deliberate <br>; "
-                        "split Chinese chapter titles over about 10-12 characters into two balanced lines"
+                        "split only genuinely long Chinese chapter titles into two balanced lines"
                     )
 
     if section_blocks:

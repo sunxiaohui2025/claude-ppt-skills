@@ -33,7 +33,9 @@ function buildOverview() {
     card.className = 'overview-card';
     card.type = 'button';
     const iframe = document.createElement('iframe');
-    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}html,body{width:1280px!important;height:720px!important;margin:0!important;overflow:hidden!important}.deck{width:1280px!important;height:720px!important}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}:root{--stage-top:58px;--stage-bottom:92px;--stage-x:90px}.slide{display:grid!important;position:relative!important;inset:auto!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;padding:var(--stage-top) var(--stage-x) var(--stage-bottom)!important}.slide-stage{transform:none}</style></head><body class="${deckStyleClass}"><main class="deck">${slide.outerHTML}</main></body></html>`;
+    const previewSlide = slide.cloneNode(true);
+    previewSlide.classList.add('active');
+    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}html,body{width:1280px!important;height:720px!important;margin:0!important;overflow:hidden!important}.deck{width:1280px!important;height:720px!important}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}:root{--stage-top:58px;--stage-bottom:92px;--stage-x:90px}.slide{display:grid!important;position:relative!important;inset:auto!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;padding:var(--stage-top) var(--stage-x) var(--stage-bottom)!important}.slide:not(.active){display:grid!important}.slide-stage{transform:none}</style></head><body class="${deckStyleClass}"><main class="deck">${previewSlide.outerHTML}</main></body></html>`;
     iframe.srcdoc = html;
     const label = document.createElement('span');
     label.textContent = `${i + 1}/${slides.length}`;
