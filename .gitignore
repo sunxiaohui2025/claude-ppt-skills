@@ -1,0 +1,22 @@
+# 根目录部署配置（含真实密码，绝不提交）
+.env
+
+decks/*
+scripts/**/__pycache__/
+backend/.env
+
+
+# IDE local-history snapshots (VS Code "Local History" extension).
+# Not meant for version control — they often contain intermediate/secret values.
+.history/
+.vscode/
+.idea/
+
+
+.DS_Store
+*.log
+
+# Generic secrets safety net
+*.pem
+*.key
+

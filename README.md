@@ -106,7 +106,9 @@ dune-keynote-slide/
 │   └── style-packs/
 │       └── dune.md
 └── scripts/
+    ├── generate_deck.py
     ├── merge_deck.py
+    ├── render_check.py
     ├── serve_editor.py
     └── validate_deck_contract.py
 ```
@@ -119,8 +121,10 @@ dune-keynote-slide/
 - `references/layout-library.md`：各种页面版式的选择规则和结构示例。
 - `references/style-packs/dune.md`：默认风格包，后续可参考它扩展新风格。
 - `scripts/merge_deck.py`：把单页源文件合并成最终 `index.html`。
+- `scripts/generate_deck.py`：受限运行环境专用；从参数中的 slide 源码创建 `sources/`，再调用 `merge_deck.py` 生成最终 HTML。
 - `scripts/serve_editor.py`：本地编辑保存服务。
 - `scripts/validate_deck_contract.py`：生成结果校验脚本。
+- `scripts/render_check.py`：可选的浏览器渲染检查脚本，用 1366×768 和 1280×720 检查重叠、溢出和底部遮挡。
 
 ## 生成后的 PPT 结构
 
@@ -368,6 +372,25 @@ python3 dune-keynote-slide/scripts/validate_deck_contract.py my-deck/index.html
 - 最终 JS 是否出现了被错误转义的模板字符串，比如 `\`` 或 `\${...}`。
 - 最终 JS 是否出现了双重转义的正则语法。
 
+如果本机安装了 Playwright，建议再做一次渲染级检查：
+
+```bash
+python3 dune-keynote-slide/scripts/render_check.py my-deck
+```
+
+如果想保留逐页截图用于人工复核：
+
+```bash
+python3 dune-keynote-slide/scripts/render_check.py my-deck --screenshots my-deck/check-shots
+```
+
+这个检查会打开真正的浏览器视口，重点发现静态校验看不到的问题：
+
+- 是否同一时间出现多页幻灯片。
+- 13 寸笔记本视口下内容是否顶到边缘。
+- 内容是否压到底部 footer 或进度条区域。
+- 模型是否把太多内容塞进章节页或密集图表页。
+
 ## 多风格扩展
 
 这个 Skill 支持未来扩展多种风格。
@@ -417,10 +440,13 @@ python3 dune-keynote-slide/scripts/merge_deck.py my-deck
 # 3. 校验生成结果
 python3 dune-keynote-slide/scripts/validate_deck_contract.py my-deck
 
-# 4. 打开预览
+# 4. 可选：13 寸笔记本渲染检查
+python3 dune-keynote-slide/scripts/render_check.py my-deck
+
+# 5. 打开预览
 open my-deck/index.html
 
-# 5. 可选：启动本地编辑保存服务
+# 6. 可选：启动本地编辑保存服务
 cd my-deck
 python3 ../dune-keynote-slide/scripts/serve_editor.py 8765
 ```

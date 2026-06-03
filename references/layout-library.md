@@ -25,8 +25,13 @@ All layouts below are slide-source patterns only. They must be placed inside the
 
 Estimate slide capacity before writing HTML. Split first; shrink second.
 
+- Count rough text length before choosing a layout. A page that is semantically correct but visually overfilled is still wrong.
+- Cards should have comparable text weight. If one card is more than 1.5x longer than its siblings, shorten it, split the card group, or choose a comparison/problem-solution layout.
+- Four cards must stay in one designed row only when each card is very short. If the fourth card wraps to a new row in a 13-inch viewport, reduce text first; if still crowded, use a 2x2 `grid-4`.
+- For `cards-3`, keep support text around 16-28 Chinese characters per card. For `flow-cards`, keep support text around 20-34 Chinese characters. For `compare-2`, keep each panel under 48 Chinese characters unless it is the only proof object on the page.
 - Numbered section pages are not content pages. If a page has `.section-ghost-number`, it must not contain `.proof-object`, cards, layers, tables, timelines, charts, or lists.
 - A section page may contain only: kicker, section number, title, one short subtitle/claim, and low-opacity ambient icons.
+- If a numbered section title exceeds about 10-12 Chinese characters, insert one deliberate `<br>` at a semantic pause. Do not let a chapter title run as one long line beyond the right edge.
 - If section context needs examples, architecture, scenarios, or bullets, create the next slide as the content slide.
 - A normal content slide should have one protagonist proof object. If it needs both a chapter title and a proof object, split into `cinematic-section` + content layout.
 - Five-layer stacks, four-card grids, and long roadmaps often need their own page. Do not attach them under a chapter divider.
@@ -57,8 +62,8 @@ The old `dune-sample-deck.html` layout library has been folded into these requir
 ## Cards And Lists
 
 - `two-cards`: two equal panels.
-- `three-cards`: three equal panels; only one highlighted colored card by default.
-- `grid-four`: 2x2 grid.
+- `three-cards`: three equal panels; only one highlighted colored card by default. Keep cards visually equal height and comparable text length.
+- `grid-four`: 2x2 grid. Use this instead of forcing a fourth item into a three-card row when content is not extremely short.
 - `multi-column-list`: 3 columns of short list items.
 - `subtitle-band-cards`: important subtitle band + three cards + bottom conclusion.
 - `delivery-flow-cards`: three role/stage cards with arrows and chips.
@@ -101,6 +106,7 @@ Avoid tiny proof objects on content-heavy pages.
 
 - Card groups must occupy at least 55% of slide width and 32% of slide height.
 - Three cards should use min-height `clamp(190px, 29vh, 250px)` and large card titles.
+- Card groups must look equal-height. Do not allow one card to grow taller while siblings stay short; normalize by shortening text or using the tallest-card height for the whole grid.
 - Four grids should use a 2x2 block centered in the proof area, not small icon buttons.
 - Radial hub diagrams should use a 360-460px core area and place nodes around it with visible spacing.
 - Timeline layouts should stretch across 80-90% of stage width; do not leave a tiny timeline in the middle.
@@ -121,6 +127,8 @@ Review every slide for layout-content fit:
 - If three consecutive slides share the same visual grammar, swap the middle one to statement, split, image, flow, or hierarchy.
 - If a numbered section page contains a proof object, split it immediately. The section page keeps only chapter number/title/subtitle; the proof object moves to the next page.
 - If any slide's content visually approaches the top or bottom edge, compress the proof object, split the slide, or switch to a two-column structure. Never let content touch the viewport edge in overview thumbnails.
+- If any card row wraps unexpectedly, treat it as a failed layout. Use shorter text, smaller secondary text, or switch to `grid-4`; do not accept an orphan card on a second row.
+- If image/text slides produce too many text line breaks, rebalance the split: give the text column enough width, shorten the claim, or split the explanation into the next slide. The image can be large, but the text side cannot become a narrow caption column.
 - If an agenda/list has more than 5 rows, use a balanced two-column list instead of a single tall list.
 - If a layer stack, architecture stack, quote + conclusion, or three-card page exceeds the safe stage height, reduce vertical gaps, card padding, list line-height, and conclusion-band height before reducing title hierarchy.
 - Footer controls must stay visually quiet; they should never compete with content or look like a decorative bottom bar.
@@ -159,7 +167,7 @@ Use cinematic section pages for chapter dividers and one-sentence theme pages.
 
 - Add a low-opacity chapter number as a left-side mark: `.section-ghost-number` with `01`, `02`, etc. Keep it about half the height of the section title block, not a giant background number.
 - Section title should be very large: `clamp(62px, min(7.2vw, 12vh), 106px)`.
-- Keep the section title on one line when possible. If it must wrap, allow at most one line break.
+- Keep the section title on one line only when it is short. For Chinese titles longer than about 10-12 characters, insert one semantic `<br>` and balance the two lines.
 - Subtitle/claim should have at most one `<br>`; shorten or split if it becomes three lines.
 - Use low-opacity ambient icons only; do not let glyphs compete with the title.
 - Do not use ordinary small statement pages for chapter dividers; use the left-side number + large title composition.
@@ -278,6 +286,7 @@ The cover motion marks are anchored to the title composition, not to the viewpor
 Use this pass before writing source slides. It prevents good-looking large-screen pages from collapsing on 13-inch laptops.
 
 - Cover: title may use at most two lines; if the title is longer, shorten the displayed title and move context into the subtitle.
+- Cover subtitle/meta is the second information layer, not body text. Keep it visually strong, usually 24-38px on desktop, with 1-2 balanced lines.
 - Agenda: 3-5 rows are single-column; 6 rows should become two columns; more than 6 rows should split into a chapter overview plus detailed agenda.
 - Cinematic section: title + one subtitle only. Never place cards, bullets, proof objects, or architecture content below the chapter title.
 - Three-card pages: each card should carry one headline and 1-2 short support lines. If a card needs bullets, split or use `problem-solution`.

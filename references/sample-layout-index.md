@@ -7,6 +7,11 @@
 3. 仅替换文本、数值、标签及常规重复节点。
 4. 保留原有组件类名与层级结构不变。
 5. 禁止新增自定义通用结构，例如 `content-block`、`statement-slide`、`section-slide` 或自定义行内网格样式。
+6. 禁止发明新的 `layout-*` 别名。除 `layout-cover`、`layout-agenda`、`layout-subtitle-band`、`layout-delivery-flow`、`layout-closing` 外，其他 `layout-*` 都视为错误。
+
+错误示例：`layout-split`、`layout-statement`、`layout-cinematic-section`、`layout-flow-cards`、`layout-icons-grid`、`layout-compare-2`。
+
+正确做法：保持模板真实类名，例如 `split`、`statement-stage`、`icons-grid`、`compare-2`、`flow-cards`、`thanks`。
 
 ---
 
@@ -22,7 +27,7 @@
 - `09 图标+文字`：样式 `icons-grid`；3-4组图标配说明文案
 - `10 双卡片布局`：样式 `cards-2`；两个等宽面板
 - `11 三卡片布局`：样式 `cards-3`；三个等宽面板，仅放置简短文案
-- `12 四格网格`：样式 `grid-4`；四个紧凑内容模块
+- `12 四格网格`：样式 `grid-4`；四个紧凑内容模块。若四个卡片无法在一行保持舒展，不要强行使用三卡片扩展，改用四宫格
 - `13 多列列表`：样式 `multi-columns`；三列简短列表内容
 - `14 左右对比`：样式 `compare-2`；常规内容与高亮内容对照展示
 - `15 优劣分析`：样式 `compare-2`；优势与风险对比
@@ -47,6 +52,8 @@
 - `34 交付流程`：样式 `layout-delivery-flow` + `flow-cards`；用户/前端/平台全链路交付流程
 - `35 结尾页`：样式 `thanks`；固定为最终页面，包含致谢标识、居中文字及作者信息，**禁止使用** `statement-rule` 样式
 
+章节页说明：章节页不要使用 `layout-cinematic-section`。应使用 `statement-stage` 章节结构，并包含 `section-ghost-number`、`kicker`、大标题和一句短副标题；不要放卡片、列表、流程或证明对象。
+
 ---
 
 ## 选用规则
@@ -69,11 +76,18 @@
 - 将图片占位框替换为正式图片资源
 - 编辑图表数据：修改SVG坐标、柱体高度、图例文字
 
+容量要求：
+- 同一组卡片必须等高，不能让内容最多的卡片单独撑高。
+- 每张卡片的辅助说明尽量控制在 16-28 个汉字；流程卡片控制在 20-34 个汉字。
+- 章节标题超过 10-12 个汉字时，按语义主动插入一个 `<br>`，最多两行。
+- 图文页不要把文字列压得太窄；如果正文折行过多，缩短正文或拆页。
+
 ---
 
 ## 禁止操作
 - 不得将原有组件替换为 `content-block`
 - 未同步更新 `base.css`、本索引文件及校验工具时，禁止新增版式名称
+- 禁止把真实组件类改写成模型自造的 `layout-*` 别名
 - 禁止使用大量行内CSS控制布局、间距、配色及字体样式
 - 投屏演示幻灯片，正文字号不得使用 `1rem` 小字体
 - 章节分隔编号下方，禁止额外添加内容

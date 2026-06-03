@@ -37,6 +37,49 @@ FORBIDDEN_LAYOUT_CLASSES = {
     "highlight",
 }
 
+ALLOWED_LAYOUT_TOKENS = {
+    "layout-cover",
+    "layout-agenda",
+    "layout-subtitle-band",
+    "layout-delivery-flow",
+    "layout-closing",
+    "text-page-clean",
+    "split",
+    "stack-vertical",
+    "full-image",
+    "icons-grid",
+    "cards-2",
+    "cards-3",
+    "grid-4",
+    "multi-columns",
+    "compare-2",
+    "table",
+    "timeline-h",
+    "timeline-v",
+    "flow",
+    "branch",
+    "tree",
+    "radial",
+    "nested",
+    "chart-card",
+    "pie-wrap",
+    "line-chart",
+    "combo",
+    "problem-solution",
+    "goal-plan",
+    "statement-stage",
+    "thanks",
+    "closing",
+}
+
+VALID_LAYOUT_PREFIX_TOKENS = {
+    "layout-cover",
+    "layout-agenda",
+    "layout-subtitle-band",
+    "layout-delivery-flow",
+    "layout-closing",
+}
+
 FORBIDDEN_INLINE_STYLE_PATTERNS = re.compile(
     r"(display|grid-template|font-size|line-height|margin|padding|background|border|color)\s*:",
     re.I,
@@ -51,6 +94,21 @@ def fail(message: str) -> int:
 def class_tokens(tag: str) -> list[str]:
     match = re.search(r'class=(["\'])(.*?)\1', tag, re.S)
     return match.group(2).split() if match else []
+
+
+def all_class_tokens(html: str) -> set[str]:
+    tokens: set[str] = set()
+    for tag in re.finditer(r'<[^>]*class=(["\']).*?\1[^>]*>', html, re.S):
+        tokens.update(class_tokens(tag.group(0)))
+    return tokens
+
+
+def plain_text(html: str) -> str:
+    return re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", html))
+
+
+def chinese_char_count(text: str) -> int:
+    return len(re.findall(r"[\u4e00-\u9fff]", text))
 
 
 def validate_deck(target_path: str) -> dict:
@@ -119,6 +177,17 @@ def validate_deck(target_path: str) -> dict:
             "found custom/legacy layout classes that bypass the layout library: "
             + ", ".join(forbidden_used)
         )
+    unknown_layout_tokens = sorted(
+        token for token in used_classes
+        if token.startswith("layout-") and token not in VALID_LAYOUT_PREFIX_TOKENS
+    )
+    if unknown_layout_tokens:
+        raise ValueError(
+            "found invented layout-* classes that are not in the sample deck contract: "
+            + ", ".join(unknown_layout_tokens)
+            + ". Copy a DOM pattern from assets/html-template/dune-sample-deck.html "
+            "and use its real component classes instead."
+        )
 
     for style_match in re.finditer(r'\sstyle=(["\'])(.*?)\1', markup, flags=re.S | re.I):
         style_value = style_match.group(2).strip()
@@ -133,29 +202,51 @@ def validate_deck(target_path: str) -> dict:
                 "and sources/style.css instead of per-element style attributes"
             )
 
-    for i, section_open in enumerate(slides, 1):
-        if 'data-slide-id=' not in section_open:
-            raise ValueError(f"slide {i} missing data-slide-id")
-        if 'data-source=' not in section_open:
-            raise ValueError(f"slide {i} missing data-source")
-
-    last_slide_classes = class_tokens(slides[-1])
-    if not any(token in last_slide_classes for token in ("layout-closing", "closing", "thanks")):
-        raise ValueError(
-            "last slide must be a closing/thanks page; use class layout-closing, closing, or thanks"
-        )
-
     section_blocks = re.findall(
         r'<section\b[^>]*>.*?</section>',
         markup,
         flags=re.S | re.I,
     )
+
+    for i, section_open in enumerate(slides, 1):
+        if 'data-slide-id=' not in section_open:
+            raise ValueError(f"slide {i} missing data-slide-id")
+        if 'data-source=' not in section_open:
+            raise ValueError(f"slide {i} missing data-source")
+        section_html = section_blocks[i - 1] if i - 1 < len(section_blocks) else section_open
+        tokens = sorted(all_class_tokens(section_html))
+        layout_tokens = [
+            token for token in tokens
+            if token in ALLOWED_LAYOUT_TOKENS
+        ]
+        if not layout_tokens:
+            raise ValueError(
+                f"slide {i} has no allowed sample layout token in {tokens}; choose and copy "
+                "a concrete DOM pattern from references/sample-layout-index.md and "
+                "assets/html-template/dune-sample-deck.html"
+            )
+
+    last_slide_classes = all_class_tokens(section_blocks[-1]) if section_blocks else set(class_tokens(slides[-1]))
+    if not any(token in last_slide_classes for token in ("layout-closing", "closing", "thanks")):
+        raise ValueError(
+            "last slide must be a closing/thanks page; use class layout-closing, closing, or thanks"
+        )
+
     for i, section_html in enumerate(section_blocks, 1):
         if "section-ghost-number" in section_html and "statement-rule" in section_html:
             raise ValueError(
                 f"slide {i} is a numbered chapter page but contains .statement-rule; "
                 "chapter dividers must not use the decorative horizontal rule"
             )
+        if "section-ghost-number" in section_html:
+            h2_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", section_html, flags=re.S | re.I)
+            if h2_match:
+                h2_html = h2_match.group(1)
+                if chinese_char_count(plain_text(h2_html)) > 12 and "<br" not in h2_html.lower():
+                    raise ValueError(
+                        f"slide {i} chapter title is too long without a deliberate <br>; "
+                        "split Chinese chapter titles over about 10-12 characters into two balanced lines"
+                    )
 
     if section_blocks:
         last_slide_html = section_blocks[-1]

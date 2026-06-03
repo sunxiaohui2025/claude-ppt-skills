@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -27,8 +28,37 @@ def has_class_token(html: str, token: str) -> bool:
     return False
 
 
+def class_tokens(tag: str) -> list[str]:
+    match = re.search(r'class=(["\'])(.*?)\1', tag, re.S)
+    return match.group(2).split() if match else []
+
+
+def resolve_deck_folder(path_value: str) -> Path:
+    if not path_value:
+        raise ValueError("Missing deck_folder. Pass the deck root folder that contains sources/.")
+    path = Path(path_value).expanduser().resolve()
+    if path.is_file():
+        if path.name.startswith("slide-") and path.parent.name == "sources":
+            return path.parent.parent
+        if path.name == "deck.config.json" and path.parent.name == "sources":
+            return path.parent.parent
+        if path.suffix.lower() == ".html" and path.parent.name == "sources":
+            return path.parent.parent
+        if path.suffix.lower() == ".html" and (path.parent / "sources").exists():
+            return path.parent
+    if path.is_dir():
+        if path.name == "sources":
+            return path.parent
+        if (path / "sources").exists():
+            return path
+    raise FileNotFoundError(
+        f"Cannot resolve deck root from {path}. Expected a deck folder containing sources/, "
+        "a sources/ folder, or a slide/source HTML file inside sources/."
+    )
+
+
 def merge_deck(deck_folder: str) -> dict:
-    deck = Path(deck_folder).resolve()
+    deck = resolve_deck_folder(deck_folder)
     sources = deck / "sources"
     if not sources.exists():
         raise FileNotFoundError(f"Missing sources folder: {sources}")
@@ -50,8 +80,9 @@ def merge_deck(deck_folder: str) -> dict:
     slides = []
     for i, path in enumerate(slide_files, 1):
         html = read(path).strip()
-        if not re.search(r'<section\s+class="slide', html):
-            raise ValueError(f"Slide source must contain <section class=\"slide...\">: {path}")
+        section_match = re.search(r'<section\b[^>]*>', html, re.S | re.I)
+        if not section_match or "slide" not in class_tokens(section_match.group(0)):
+            raise ValueError(f"Slide source must contain a <section> with class token \"slide\": {path}")
         if has_class_token(html, "stage"):
             raise ValueError(f"Slide source must use .slide-stage, not legacy .stage: {path}")
         if len([m for m in re.finditer(r'class=(["\'])(.*?)\1', html, re.S) if "slide-stage" in m.group(2).split()]) != 1:
@@ -90,8 +121,15 @@ def run(deck_folder: str, **kwargs) -> dict:
     return merge_deck(deck_folder)
 
 
-def generate(deck_folder: str = None, deck: str = None, **kwargs) -> dict:
-    return merge_deck(deck_folder or deck or kwargs.get("deck_folder") or kwargs.get("deck"))
+def generate(deck_folder: str = None, deck: str = None, output: str = None, output_path: str = None, **kwargs):
+    result = merge_deck(deck_folder or deck or kwargs.get("deck_folder") or kwargs.get("deck"))
+    target = output or output_path or kwargs.get("output") or kwargs.get("output_path")
+    if target:
+        target_path = Path(target).expanduser().resolve()
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(result["output_path"], target_path)
+        return str(target_path)
+    return result
 
 
 def main() -> int:

@@ -12,7 +12,8 @@ This skill does not mean "write an HTML presentation from scratch." It means:
 1. Create or update modular files under `<deck-folder>/sources/`.
 2. Run `scripts/merge_deck.py <deck-folder>`.
 3. Validate with `scripts/validate_deck_contract.py <deck-folder>`.
-4. Deliver only the merged `<deck-folder>/index.html`.
+4. When Playwright is available, run `scripts/render_check.py <deck-folder>` to catch viewport overflow and stacked slides.
+5. Deliver only the merged `<deck-folder>/index.html`.
 
 Any other final HTML is invalid, even if it visually looks like slides.
 
@@ -60,6 +61,23 @@ Hard stop: if the current output does not contain the canonical runtime, overvie
 
 Hard stop: having the canonical shell is not enough. Slide internals must use the sample-deck layout components (`cards-3`, `compare-2`, `subtitle-band`, `flow-cards`, `system-map`, `case-transform`, `thanks`, etc.). Do not create a generic custom page system with `content-block` and inline CSS; that bypasses the design rules and produces low-quality pages.
 
+Hard stop: do not invent descriptive layout aliases. These are invalid: `layout-split`, `layout-statement`, `layout-cinematic-section`, `layout-flow-cards`, `layout-icons-grid`, `layout-compare-2`, and similar model-made `layout-*` names. Use the actual sample tokens: `split`, `statement-stage`, `icons-grid`, `compare-2`, `layout-delivery-flow`, `layout-subtitle-band`, `thanks`, etc.
+
+## Local Claude Code Operating Model
+
+When running in local Claude Code, use the normal filesystem and shell. Do not use platform-specific save helpers, sandbox wrappers, or one-off HTML builders.
+
+Stable architecture:
+
+1. **Narrative layer**: confirm audience, thesis, chapter arc, and page-level claims.
+2. **Source layer**: write only `sources/outline.md`, `sources/deck.config.json`, `sources/style.css`, and `sources/slide-XX.html`.
+3. **Template layer**: copy DOM patterns from `assets/html-template/dune-sample-deck.html` through `references/sample-layout-index.md`.
+4. **Merge layer**: run `scripts/merge_deck.py`; only this script creates `index.html`.
+5. **Contract layer**: run `scripts/validate_deck_contract.py`; fix sources if it fails.
+6. **Render layer**: run `scripts/render_check.py` when available; fix density, overflow, or stacked-slide issues before delivery.
+
+If any step fails, revise the modular source files and rerun the same pipeline. Never recover by hand-writing a standalone final HTML file.
+
 ## Template-First Layout Rule
 
 The stable design source is `assets/html-template/dune-sample-deck.html` relative to this skill root.
@@ -72,7 +90,7 @@ For each generated slide:
 4. Replace only content and repeated items within the same component grammar.
 5. Keep component classes such as `split`, `cards-3`, `compare-2`, `timeline-h`, `problem-solution`, `layout-delivery-flow`, and `thanks`.
 
-Do not design page layout from scratch unless you are deliberately adding a new reusable layout to `base.css`, `references/sample-layout-index.md`, `references/layout-library.md`, and the validator in the same change.
+Do not design page layout from scratch unless you are deliberately adding a new reusable layout to `base.css`, `references/sample-layout-index.md`, `references/layout-library.md`, and the validator in the same change. New `layout-*` class names are rejected unless explicitly added to the validator allowlist.
 
 Do not add QA automation, image generation, web search, or complex external dependencies. Use CSS/SVG/HTML diagrams and provided images only.
 
@@ -104,18 +122,19 @@ Do not add QA automation, image generation, web search, or complex external depe
 6. For each slide, identify the protagonist object: `title`, `image`, `flow`, `data`, `comparison`, `hierarchy`, `cards`, `timeline`, or `conclusion`.
 7. Apply information reduction: if a slide has too much content, split it instead of shrinking text.
 8. Apply the section-page gate before layout routing: a numbered cinematic chapter page may contain only kicker, section number, title, one short subtitle/claim, and faint ambient icons. If there is any list, card, diagram, table, timeline, or proof object, split it into the following content slide.
-9. Estimate capacity before writing HTML: if cards, layers, tables, or lists would approach the bottom safe area, split the slide instead of compressing below readable sizes.
+9. Estimate capacity before writing HTML: if cards, layers, tables, or lists would approach the bottom safe area, split the slide instead of compressing below readable sizes. Count rough Chinese characters before writing markup: cards should usually stay under 28 Chinese characters of support text each, flow cards under 34, comparison panels under 48, and normal claims under 42. If one card is much longer than the others, shorten it or split the slide; do not let one card stretch the grid.
 10. Route each slide using `references/sample-layout-index.md` first. Pick the closest sample slide from `assets/html-template/dune-sample-deck.html`, copy its DOM structure, and replace content. Use `references/layout-library.md` only for capacity and routing rules around those sample layouts.
 11. Avoid repetitive layouts: do not use card/list/directory-like layouts more than 2 times in a row.
 12. Apply motion budget: cover, cinematic sections, and closing may have stronger ambient motion; normal content pages get subtle entrance or no motion.
-13. Perform a final layout review pass from `references/layout-library.md`: catch content-rich bullet pages, content-light dense grids, tiny radial diagrams, tiny timelines, section pages with proof objects, and repeated visual grammar. Revise slide layout choices before merging.
+13. Perform a final layout review pass from `references/layout-library.md`: catch content-rich bullet pages, content-light dense grids, tiny radial diagrams, tiny timelines, section pages with proof objects, uneven card heights, four-card rows that wrap, image/text pages with cramped text columns, long chapter titles without `<br>`, and repeated visual grammar. Revise slide layout choices before merging.
 14. Always end with a real closing/thanks page. The last slide must use `layout-closing`, `closing`, or `thanks`, must include `thanks-mark`, and must include `author-meta` with speaker/date/logo metadata echoed from the cover. Closing text must be centered, the main title should be larger than normal content titles, and the closing slide must not include `<div class="statement-rule"></div>`.
 15. Generate only `sources/slide-XX.html`, `sources/style.css`, `sources/outline.md`, and `sources/deck.config.json`. Do not write root-level custom HTML manually.
 16. Run `python3 <skill>/scripts/merge_deck.py <deck-folder>` to create `index.html`.
-17. Run or rely on `python3 <skill>/scripts/validate_deck_contract.py <deck-folder>` after merging. If validation fails, fix the sources and merge again. Do not deliver a deck that fails the contract.
-18. Do a 13-inch laptop layout sanity check mentally or visually: the deck must remain readable at `1366x768`, and should still preserve top/bottom breathing room at `1280x720` without requiring browser zoom-out. If a page only works at 80% browser zoom, split the content or use a more compact layout. Do not optimize for phone or extremely narrow windows if that would weaken keynote composition.
-19. If the final answer or environment requires a single downloadable HTML artifact, read the merged `<deck-folder>/index.html` and export/save exactly that merged content. Never export a hand-written substitute.
-20. Validate the exact exported HTML file, not only the deck folder. If export tooling escapes JavaScript template strings into `\`` or `\${...}`, the deck will throw `Invalid or unexpected token`; treat that as a failed export and copy the merged `index.html` bytes directly.
+17. Run `python3 <skill>/scripts/validate_deck_contract.py <deck-folder>` after merging. If validation fails, fix the sources and merge again. Do not deliver a deck that fails the contract.
+18. Run `python3 <skill>/scripts/render_check.py <deck-folder>` when Playwright is installed. Treat failures as real design bugs: split dense slides, choose a larger template, or reduce vertical rhythm before reducing readability. If Playwright is unavailable, do a manual 13-inch laptop sanity check at `1366x768` and `1280x720`.
+19. The deck must remain readable at `1366x768`, and should still preserve top/bottom breathing room at `1280x720` without requiring browser zoom-out. If a page only works at 80% browser zoom, split the content or use a more compact layout. Do not optimize for phone or extremely narrow windows if that would weaken keynote composition.
+20. If the final answer or environment requires a single downloadable HTML artifact, read the merged `<deck-folder>/index.html` and export/save exactly that merged content. Never export a hand-written substitute.
+21. Validate the exact exported HTML file, not only the deck folder. If export tooling escapes JavaScript template strings into `\`` or `\${...}`, the deck will throw `Invalid or unexpected token`; treat that as a failed export and copy the merged `index.html` bytes directly.
 
 ## Pre-Generation Confirmation Gate
 
@@ -287,80 +306,6 @@ Prefer semantic layouts over generic cards:
 - `references/style-packs/dune.md`: default style pack and example for future style packs.
 - `assets/html-template/`: runtime template with shortcuts, edit mode, overview mode, and base CSS.
 - `scripts/merge_deck.py`: merges modular sources into `index.html`.
+- `scripts/validate_deck_contract.py`: static contract check for canonical runtime, slide wrappers, layout classes, and forbidden hand-written HTML patterns.
+- `scripts/render_check.py`: optional browser check for 13-inch viewport overflow, stacked slides, and footer collisions.
 - `scripts/serve_editor.py`: optional local editor server for `E` edit mode save-back. Chrome/Edge users can also save source slides through File System Access API without Python.
-
-
-## 交付方式(必读!)
-If the host environment provides a file export tool such as `save_output_file`, 
-在中间过程中生成单页的html就不要调用当前`save_output_file`工具保存了，
-等到最后所有的页面生成完成并且合并成一个html最后的产物必须调用 `save_output_file` 工具保存,而不是把 HTML 代码打字给用户。
-
-正确做法:
-```
-工具调用: save_output_file
-  filename: "智能体介绍.html"
-  content: <完整 HTML 字符串>
-  mime: "text/html"
-```
-
-调用成功后,前端会显示一张文件卡片(下载按钮 + 打开预览按钮),用户可以直接在右侧分屏看渲染效果。
-
-导出后必须对最终交付文件再跑一次:
-
-```bash
-python3 <skill>/scripts/validate_deck_contract.py <exported-file.html>
-```
-
-如果 `<script>` 中出现 `\`` 或 `\${...}` 这种被转义的模板字符串,说明导出工具把 JS 当字符串二次转义了,必须重新用合并后的 `index.html` 原始内容导出。
-
-**绝对不要**:
-- 把整段 HTML 用 ``` 包起来贴给用户
-- 让用户"复制保存为 xxx.html 文件"
-- 输出"将上面代码保存为..."这种指引
-
-如果 HTML 比较大,直接放进 `content` 参数里即可,工具支持很大的字符串。
-
-
-## 脚本执行受限时的处理
-
-如果当前智能体环境禁止直接通过 Bash 执行 `python3 <skill>/scripts/merge_deck.py <deck-folder>`，仍然不能手动合并 HTML。
-
-正确顺序:
-
-1. 优先使用平台提供的脚本执行工具调用当前 skill 的脚本。
-2. 合并脚本必须是当前 skill 的 `scripts/merge_deck.py`。
-3. 校验脚本必须是当前 skill 的 `scripts/validate_deck_contract.py`。
-4. 最终交付的文件必须是脚本生成并校验通过的 `<deck-folder>/index.html`。
-
-如果平台工具名是 `run_skill_script`，应调用当前 skill，而不是其他 skill。当前脚本同时提供 `run(...)` 和 `generate(...)` 入口，平台要求哪个函数名都可以使用:
-
-```text
-工具: run_skill_script
-参数:
-  skill: "dune-keynote-slide"
-  script: "scripts/merge_deck.py"
-  kwargs:
-    deck_folder: "<deck-folder>"
-```
-
-然后继续校验:
-
-```text
-工具: run_skill_script
-参数:
-  skill: "dune-keynote-slide"
-  script: "scripts/validate_deck_contract.py"
-  kwargs:
-    target: "<deck-folder-or-exported-html>"
-```
-
-如果当前平台没有 Bash、没有 Python 执行能力、也没有类似 `run_skill_script` 的脚本执行工具，必须停止并告诉用户: 当前环境无法生成合格 PPT。不要改为“读取模板文件并手动拼接最终 HTML”。
-
-**绝对不要**做这些:
-- 不要因为平台提示找不到 `run` 或 `generate` 就创建包装脚本或手动拼 HTML；应直接使用当前脚本提供的 `run/generate` 入口。
-- 不要调用其他 skill, 例如 `gongwnexiezuo`。
-- 不要调用与 PPT 无关的脚本, 例如 `scripts/generate_docx.py`。
-- 不要说“我手动合并生成最终 HTML”。
-- 不要只复制 CSS 和部分翻页脚本。
-- 不要省略 `overviewGrid`、`editToolbar`、`iframe.srcdoc`、`deckStyleClass` 或完整 runtime。
-- 不要交付无法通过 `validate_deck_contract.py` 的 HTML。
