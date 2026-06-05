@@ -4,9 +4,14 @@
 
 它适合把大纲、笔记、Markdown、粗略想法或技术材料，转换成一套可以直接演示的 HTML 幻灯片。默认视觉风格是「沙丘色」：暖米色背景、陶土主色、克制动效、大标题叙事、宽松留白，整体更接近发布会 / Keynote / 技术宣讲，而不是传统 PPT 模板。
 
-<img width="1427" height="697" alt="image" src="https://github.com/user-attachments/assets/df1b2e93-14b7-49ac-b0e9-0d99e630d382" />
-<img width="1411" height="701" alt="image" src="https://github.com/user-attachments/assets/f57de5df-3992-4fa6-8fde-93cd977a4de4" />
+### 四种风格
+<img width="1424" height="811" alt="截屏2026-05-28 15 23 36" src="https://github.com/user-attachments/assets/d8742e1d-0fc1-4930-ac9a-6cc783fd47cd" />
 
+### 可以网页在线编辑
+<img width="1427" height="697" alt="image" src="https://github.com/user-attachments/assets/df1b2e93-14b7-49ac-b0e9-0d99e630d382" />
+
+### 在线预览
+<img width="1358" height="701" alt="企业微信截图_1f50d244-fcc7-4854-89ac-f879879f5517" src="https://github.com/user-attachments/assets/97652379-908b-4b49-a7d2-a446e522dc6e" />
 
 ## 这个 Skill 解决什么问题
 
