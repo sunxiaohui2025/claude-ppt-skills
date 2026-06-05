@@ -77,14 +77,13 @@
 - 发现内容太多时，优先拆页，不要硬塞。
 - 避免连续多页都是卡片、目录或普通列表。
 
-当前内置 5 套风格：
+当前内置 4 套风格：
 
 | 风格 ID | 中文名 | 适合场景 |
 | --- | --- | --- |
 | `dune` | 沙丘色 | 默认风格，温暖、高端、宣讲通用 |
 | `ink-classic` | 墨水经典 | 商业发布、行业内部讲话、线下分享、私享会 |
 | `indigo-porcelain` | 靛蓝瓷 | AI、研究、技术发布会、架构分享 |
-| `white-stage` | 纯白展台 | 产品发布、Demo Day、功能演示 |
 | `editorial-mono` | 黑白专刊 | 个人观点、行业观察、专家演讲、杂志风私享会 |
 
 ## 目录结构
@@ -400,7 +399,6 @@ python3 dune-keynote-slide/scripts/render_check.py my-deck --screenshots my-deck
 - `dune`：沙丘色，默认风格。
 - `ink-classic`：墨水经典。
 - `indigo-porcelain`：靛蓝瓷。
-- `white-stage`：纯白展台。
 - `editorial-mono`：黑白专刊。
 
 新增风格建议放在：

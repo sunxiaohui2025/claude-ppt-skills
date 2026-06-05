@@ -12,7 +12,6 @@ STYLE_BODY_CLASSES = {
     "dune": "",
     "ink-classic": "style-ink-classic",
     "indigo-porcelain": "style-indigo-porcelain",
-    "white-stage": "style-white-stage",
     "editorial-mono": "style-editorial-mono",
 }
 
