@@ -1,4 +1,4 @@
-# 生成可编辑的网页版本的PPT Skill 
+# 生成可编辑的Html格式的的PPT Skill 
 
 一个用于生成高端宣讲风格 HTML PPT 的 Codex Skill，适配 Claude Code / Codex 等 Agent 环境的网页 PPT 技能,用于生成单文件 HTML 横向翻页 PPT、PPT 配图和多平台封面。
 
