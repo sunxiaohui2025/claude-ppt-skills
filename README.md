@@ -11,7 +11,8 @@
 <img width="1427" height="697" alt="image" src="https://github.com/user-attachments/assets/df1b2e93-14b7-49ac-b0e9-0d99e630d382" />
 
 ### 在线预览
-<img width="1358" height="701" alt="企业微信截图_1f50d244-fcc7-4854-89ac-f879879f5517" src="https://github.com/user-attachments/assets/97652379-908b-4b49-a7d2-a446e522dc6e" />
+<img width="1268" height="722" alt="image" src="https://github.com/user-attachments/assets/da11e54a-f568-4204-9146-35f7acc57f5a" />
+
 
 ## 这个 Skill 解决什么问题
 
