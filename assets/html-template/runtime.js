@@ -1,4 +1,13 @@
-const DUNE_KEYNOTE_RUNTIME_VERSION = '2026-05-28-stylepack-runtime-v2';
+const DUNE_KEYNOTE_RUNTIME_VERSION = '2026-06-10-fixed-canvas-v3';
+const DESIGN_W = 1280;
+const DESIGN_H = 720;
+let deckScale = 1;
+function fitDeck() {
+  deckScale = Math.min(window.innerWidth / DESIGN_W, window.innerHeight / DESIGN_H);
+  document.documentElement.style.setProperty('--deck-scale', String(deckScale));
+}
+window.addEventListener('resize', fitDeck);
+fitDeck();
 const slides = Array.from(document.querySelectorAll('.slide'));
 const pageText = document.querySelector('#pageText');
 const progressBar = document.querySelector('#progressBar');
@@ -35,7 +44,7 @@ function buildOverview() {
     const iframe = document.createElement('iframe');
     const previewSlide = slide.cloneNode(true);
     previewSlide.classList.add('active');
-    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}html,body{width:1280px!important;height:720px!important;margin:0!important;overflow:hidden!important}.deck{width:1280px!important;height:720px!important}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}:root{--stage-top:58px;--stage-bottom:92px;--stage-x:90px}.slide{display:grid!important;position:relative!important;inset:auto!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;padding:var(--stage-top) var(--stage-x) var(--stage-bottom)!important}.slide:not(.active){display:grid!important}.slide-stage{transform:none}</style></head><body class="${deckStyleClass}"><main class="deck">${previewSlide.outerHTML}</main></body></html>`;
+    const html = `<!doctype html><html><head><style>${document.querySelector('style').textContent}html,body{width:1280px!important;height:720px!important;margin:0!important;overflow:hidden!important}.deck{position:relative!important;left:0!important;top:0!important;transform:none!important}.footer,.overview,.editor-toast,.edit-toolbar{display:none!important}.slide{display:grid!important}*{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important}</style></head><body class="${deckStyleClass}"><main class="deck">${previewSlide.outerHTML}</main></body></html>`;
     iframe.srcdoc = html;
     const label = document.createElement('span');
     label.textContent = `${i + 1}/${slides.length}`;
@@ -221,7 +230,7 @@ function widthStep(delta) {
   const target = sizeTarget();
   if (!target) return toast('请先选择元素或卡片');
   const rect = target.getBoundingClientRect();
-  const current = Number(target.dataset.editWidth || Math.round(rect.width));
+  const current = Number(target.dataset.editWidth || Math.round(rect.width / deckScale));
   const next = Math.max(80, current + delta * 24);
   target.dataset.editWidth = String(next);
   target.style.setProperty('--edit-width', `${next}px`);
@@ -230,7 +239,7 @@ function heightStep(delta) {
   const target = sizeTarget();
   if (!target) return toast('请先选择元素或卡片');
   const rect = target.getBoundingClientRect();
-  const current = Number(target.dataset.editMinHeight || Math.round(rect.height));
+  const current = Number(target.dataset.editMinHeight || Math.round(rect.height / deckScale));
   const next = Math.max(40, current + delta * 18);
   target.dataset.editMinHeight = String(next);
   target.style.setProperty('--edit-min-height', `${next}px`);
@@ -266,8 +275,8 @@ function startDrag(event) {
 }
 function onDrag(event) {
   if (!dragState || !selectedEditElement) return;
-  const x = dragState.baseX + event.clientX - dragState.startX;
-  const y = dragState.baseY + event.clientY - dragState.startY;
+  const x = dragState.baseX + (event.clientX - dragState.startX) / deckScale;
+  const y = dragState.baseY + (event.clientY - dragState.startY) / deckScale;
   selectedEditElement.dataset.x = String(Math.round(x));
   selectedEditElement.dataset.y = String(Math.round(y));
   selectedEditElement.style.setProperty('--edit-x', `${Math.round(x)}px`);

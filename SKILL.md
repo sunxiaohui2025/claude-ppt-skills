@@ -132,8 +132,8 @@ Do not add QA automation, image generation, web search, or complex external depe
 16. Generate only `sources/slide-XX.html`, `sources/style.css`, `sources/outline.md`, and `sources/deck.config.json`. Do not write root-level custom HTML manually.
 17. Run `python3 <skill>/scripts/merge_deck.py <deck-folder>` to create `index.html`.
 18. Run `python3 <skill>/scripts/validate_deck_contract.py <deck-folder>` after merging. If validation fails, fix the sources and merge again. Do not deliver a deck that fails the contract.
-19. Run `python3 <skill>/scripts/render_check.py <deck-folder>` when Playwright is installed. Treat failures as real design bugs: split dense slides, choose a larger template, or reduce vertical rhythm before reducing readability. If Playwright is unavailable, do a manual 13-inch laptop sanity check at `1366x768` and `1280x720`.
-20. The deck must remain readable at `1366x768`, and should still preserve top/bottom breathing room at `1280x720` without requiring browser zoom-out. If a page only works at 80% browser zoom, split the content or use a more compact layout. Do not optimize for phone or extremely narrow windows if that would weaken keynote composition.
+19. Run `python3 <skill>/scripts/render_check.py <deck-folder>` when Playwright is installed. Treat failures as real design bugs: split dense slides, choose a larger template, or reduce vertical rhythm before reducing readability. The deck renders on a fixed 1280x720 design canvas that the runtime scales to any viewport, so one passing canvas means every resolution passes; the script still verifies 1366x768, 1280x720, and 1920x1080.
+20. All slide sizes are design px on the 1280x720 canvas. Never write `vw/vh` units or `@media` queries in `sources/slide-XX.html` or `sources/style.css`; the validator rejects them. If a page only fits by shrinking text, split the content or use a more compact layout. Do not optimize for phone or extremely narrow windows.
 21. If the final answer or environment requires a single downloadable HTML artifact, read the merged `<deck-folder>/index.html` and export/save exactly that merged content. Never export a hand-written substitute.
 22. Validate the exact exported HTML file, not only the deck folder. If export tooling escapes JavaScript template strings into `\`` or `\${...}`, the deck will throw `Invalid or unexpected token`; treat that as a failed export and copy the merged `index.html` bytes directly.
 
@@ -273,12 +273,14 @@ Do not implement arbitrary freeform CSS editing, multi-select, or full rich-text
 
 Use the dune keynote style by default:
 
-- Pure or near-pure warm cream background `#fbf7ef`.
+- Fixed 1280x720 design canvas, scaled by the runtime to fit any viewport; design in absolute px, never `vw/vh` or media queries.
+- Pure or near-pure warm cream background `#fbf7ef` with a barely-visible paper grain provided by the template.
 - For the default dune style, keep the background plain and stable. Do not add large radial glow gradients, obvious bloom, or a deck-wide frame line.
-- Main accent `#a8553d` with visible use in titles, numbers, progress, rules, chips, selected cards, and diagram paths.
+- Main accent `#a8553d` with visible use in titles, numbers, progress, rules, chips, selected cards, and diagram paths. A secondary accent token `--accent-2` exists for charts and diagram second voices; do not invent extra colors.
+- All alpha colors derive from tokens via `color-mix`; never hard-code rgba values of the accent in deck CSS.
 - Big black titles with 1 key phrase highlighted in `#a8553d`.
-- Generous 16:9 safe area using clamp-based stage variables.
-- Minimal gradients; use subtle paper texture, faint lines, low-opacity glyphs, and slow ambient motion.
+- Generous 16:9 safe area using the template stage tokens (`--stage-top/--stage-bottom/--stage-x`).
+- Entrance motion is built into the template: titles and proof-object children stagger in automatically, charts grow, and `prefers-reduced-motion` is respected. Do not add custom entrance animations per deck; ambient motion stays reserved for cover, chapter, and closing pages.
 - Author/time tags on cover and closing.
 - Closing page must center all text and may reuse the cover mark as a deeper colored animated icon.
 

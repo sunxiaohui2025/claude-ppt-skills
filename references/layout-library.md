@@ -102,12 +102,12 @@ If three consecutive pages would be cards/lists, convert one to statement, compa
 
 ## Detail Page Sizing Rules
 
-Avoid tiny proof objects on content-heavy pages.
+Avoid tiny proof objects on content-heavy pages. All sizes are design px on the fixed 1280x720 canvas.
 
 - Card groups must occupy at least 55% of slide width and 32% of slide height.
-- Three cards should use min-height `clamp(190px, 29vh, 250px)` and large card titles.
+- Three cards use the template min-height (`200px`) and large card titles.
 - Card groups must look equal-height. Do not allow one card to grow taller while siblings stay short; normalize by shortening text or using the tallest-card height for the whole grid.
-- Four grids should use a 2x2 block centered in the proof area, not small icon buttons.
+- Four grids should use a 2x2 block centered in the proof area, not small icon buttons. Four short cards in one row should use `cards-4` explicitly.
 - Radial hub diagrams should use a 360-460px core area and place nodes around it with visible spacing.
 - Timeline layouts should stretch across 80-90% of stage width; do not leave a tiny timeline in the middle.
 - Case/story pages should avoid small bullet clusters; use subtitle band, split layout, or large text panel.
@@ -141,21 +141,19 @@ Add these corrective layouts when needed:
 
 ## Case Transform Sizing
 
-For `case-transform` slides, keep the footer safe and avoid over-tall cards.
+`case-transform` is a built-in component (`.case-transform` + `.case-panel` + `.flow-arrow` + `.bottom-conclusion`). Keep the footer safe and avoid over-tall cards.
 
-- Keep the subtitle/claim on one line when possible: `white-space: nowrap`; shorten text rather than wrapping.
+- Keep the subtitle/claim on one line when possible; shorten text rather than wrapping.
 - Use compact card internals: secondary list text can be `14-17px`, smaller than normal body text.
-- Recommended card min-height: `clamp(178px, 27vh, 236px)`.
-- Recommended card padding: `clamp(20px, 2.4vw, 28px)`.
-- Bottom conclusion band should be compact: `54-64px` tall.
-- Proof object margin should be smaller than normal: `18-28px`.
-- If content still overlaps footer, split the case into two slides: old pain and new architecture.
+- The template provides card min-height `250px` and padding `26px`; do not override per deck.
+- Bottom conclusion band should stay one line.
+- If content still feels dense, split the case into two slides: old pain and new architecture.
 
 ## Alignment Rules
 
 Apply these before merging:
 
-- Except cover pages, primary `h2` titles should be larger: `clamp(50px, min(5.7vw, 9.6vh), 82px)` unless the slide is dense technical content.
+- Except cover pages, primary `h2` titles use the template scale (`60px`); do not shrink them for dense slides — split instead.
 - `statement`, `closing`, and `thanks` pages must center the full title block: kicker, h2, claim, rule, author tags.
 - One-sentence statement pages without `.section-ghost-number` should use chapter-scale h2 sizing and must highlight one key phrase inside the h2 with `.title-accent` or `.accent`.
 - Centering a parent grid is not enough; set `h2 { margin-left:auto; margin-right:auto; text-align:center; }` for centered pages.
@@ -167,7 +165,7 @@ Apply these before merging:
 Use cinematic section pages for chapter dividers and one-sentence theme pages.
 
 - Add a low-opacity chapter number as a left-side mark: `.section-ghost-number` with `01`, `02`, etc. Keep it about half the height of the section title block, not a giant background number.
-- Section title should be very large: `clamp(62px, min(7.2vw, 12vh), 106px)`.
+- Section title should be very large: the template provides `76px` for numbered chapters and `82px` for one-sentence statements.
 - Keep the section title on one line when it fits. Only add one semantic `<br>` for genuinely long Chinese titles, usually above about 18 characters or when render checking shows overflow.
 - Subtitle/claim should have at most one `<br>`; shorten or split if it becomes three lines.
 - Use low-opacity ambient icons only; do not let glyphs compete with the title.
@@ -176,80 +174,17 @@ Use cinematic section pages for chapter dividers and one-sentence theme pages.
 - For one-line statement or major viewpoint pages that are not chapter dividers, keep the centered `statement-rule` as a deliberate pause and emphasis device.
 - These one-line statement pages must not be visually smaller than chapter pages; keep their h2 at chapter-title scale while preserving the centered composition.
 
-## Cover Motion Positioning
+## Cover And Chapter Mark Placement
 
-Cover atmosphere and mark must stay inside the 16:9 safe stage.
+Cover and chapter marks are positioned by the template; do not re-position them in deck CSS.
 
-- Put cover visual elements inside or visually anchored to the slide stage.
-- Right-side orbit should sit in the right third, vertically centered, not at the far corner.
-- Main burst mark should sit near right-center/bottom-safe area, not beyond the bottom-right edge.
-- If overview thumbnails show cover icons in corners, treat it as a layout bug and tighten `.cover-atmosphere` / `.stage-mark` positioning.
-
-## Refined Chapter Mark Placement
-
-For cinematic section pages, use the chapter number as a left-side mark, not as a ghost layer under the text.
-
-- Place the number to the left of the title group in the same visual row.
-- Reduce the number size by roughly 50% compared with a full-background ghost number.
-- Use `rgba(168,85,61,.18-.22)` so the number is visible but still secondary.
-- Keep a moderate gap between number and title: `22-42px`.
-- Align kicker, title, subtitle, and rule as one text group to the right of the number.
-- On mobile/narrow viewports, stack number above and center the text group.
-
-## Refined Cover Mark Placement
-
-The cover burst mark should visually align with the title block instead of drifting to the bottom-right corner.
-
-- Move the mark left from the extreme edge: use `right: clamp(150px, 18vw, 260px)` as a default.
-- Align the mark bottom with the approximate bottom of the title/metadata group: `bottom: calc(var(--stage-bottom) + 4px)`.
-- Keep the mark size around `150-210px`, not oversized.
-- Orbit atmosphere should sit in the right third but closer to the title: `right: clamp(70px, 9vw, 150px)`.
-
-## Final Cover Motion Alignment
-
-For dune cover pages, anchor motion elements to the title block:
-
-- `.cover-atmosphere` should sit around the upper-right of the text group, not the far page corner.
-- Recommended default: `right: clamp(190px, 23vw, 340px); top: clamp(72px, 12vh, 128px)`.
-- `.stage-mark` should align visually with the author/tag row, with its bottom near the tag baseline.
-- Recommended default: `right: clamp(190px, 22vw, 330px); bottom: calc(var(--stage-bottom) + 78px)`.
-- Keep `stage-mark` compact: `138-196px`.
+- The cover stage is a two-column grid: the title block fills the left column; `.stage-mark` is a grid child anchored to the lower-right of the composition; `.cover-atmosphere` sits absolutely in the upper-right of the stage. Copy the cover DOM from `dune-sample-deck.html` and the placement is automatic.
+- Never use `position: fixed`, negative offsets, or viewport units for cover marks.
+- Chapter pages place the number to the left of the title group in the same visual row via `.section-ghost-number` inside `.title-block`. The number is visible but secondary (about 110px, 20% clay); kicker, title, and subtitle align as one text group to its right.
 
 ## Footer Line Rule
 
 Do not add a long decorative horizontal line above the footer. Keep only the actual progress bar in `.footer .progress`.
-
-## Cover Mark Target Position
-
-Place `.stage-mark` in the open area to the right of the title group, below the orbit but above the tag row, rather than near the page corner.
-
-Recommended default:
-
-```css
-.layout-cover .stage-mark {
-  position: absolute;
-  right: 2%;
-  bottom: 2%;
-  width: clamp(210px, 23vw, 300px);
-  height: clamp(210px, 23vw, 300px);
-}
-```
-
-The visual bottom of `.stage-mark` should sit in the lower-right open area of the cover, like `dune-sample-deck.html`, never at the top and never on top of the large title. It must stay inside `<section class="slide layout-cover">`; do not use `position: fixed` or negative right offsets for cover marks.
-
-The upper-right orbit `.cover-atmosphere` should sit to the right of the title group without covering text:
-
-```css
-.layout-cover .cover-atmosphere {
-  position: absolute;
-  inset: -6vh -4vw auto auto;
-  width: min(50vw, 640px);
-  height: min(50vw, 640px);
-  opacity: .34;
-}
-```
-
-When the title is very wide, remove or reduce `.layout-cover .title-block` right padding rather than letting the stage mark overlap the headline.
 
 ## Image Text Balance
 
@@ -262,17 +197,16 @@ For split image/text slides, the text side must read as equal in importance to t
 
 ## Projection Safe Area Rules
 
-All slides must preserve a visible 16:9 safe area in both normal mode and overview thumbnails.
+The deck renders on a fixed 1280x720 design canvas that the runtime scales to any viewport, so a slide that fits the canvas fits every resolution identically.
 
-- Target responsive baseline: design for presentation laptops, not phones. The smallest expected useful canvas is `1366x768`, with a stricter fallback check at `1280x720`.
-- Pages must not require browser zoom-out. If a slide looks correct only at `80%` browser zoom, the layout is too dense and must be split or compressed by layout rules.
-- Do not convert keynote compositions into mobile-style stacked pages just to support extremely narrow windows. If content does not fit at `1280x720`, split the slide.
-- Keep top safe padding around `60-92px` and bottom safe padding around `104-148px` on desktop projection.
+- Write all sizes in design px. Never use `vw/vh` units or `@media` queries in slide sources or `sources/style.css` (the validator rejects them).
+- The template safe area is `--stage-top: 56px`, `--stage-bottom: 88px`, `--stage-x: 84px`; the content stage is `1112x576`.
 - The proof object should usually start `20-34px` below the title block. Dense pages may use `14-24px`, but never `0`.
 - Long lists: more than 5 rows become two balanced columns. More than 8 rows should be split into two slides unless the text is very short.
 - Dense stacks: use compact vertical rhythm, not smaller unreadable text. Prefer reducing gaps, padding, and conclusion bands before shrinking body below `14px`.
-- Conclusion bands should be compact (`14-20px` padding) on dense slides and should not sit on top of the footer.
-- Footer progress should be 2px high, low opacity, and close to the bottom edge. Navigation buttons should use light translucent styling instead of solid dark circles.
+- Conclusion bands should stay one line and must not sit on top of the footer.
+- Footer progress is 2px high, low opacity, and close to the bottom edge; navigation buttons use light translucent styling. The template provides this; do not restyle.
+- `scripts/render_check.py` verifies overflow at 1366x768, 1280x720, and 1920x1080; fix failures by splitting or choosing a roomier layout, not by shrinking text.
 
 ## Cover Anchor Rule
 

@@ -4,13 +4,14 @@
 
 ## Tokens
 
-- Background: `#0a0a0b`
-- Main text: `#f1efea`
-- Secondary text: `#bfb8ac`
-- Muted: `#8f8a82`
-- Accent: `#c8a46a`
-- Panel: `rgba(241,243,245,.055)`
-- Line: `rgba(241,239,234,.13)`
+- Background `--cream`: `#0a0a0b`
+- Panel `--porcelain`: `#161412`
+- Main text `--ink`: `#f1efea`
+- Secondary text `--stone`: `#bfb8ac`
+- Muted `--muted`: `#8f8a82`
+- Accent `--clay`: `#c8a46a`
+- Secondary accent `--accent-2`: `#8d9aa8` — charts second voice
+- 其余线条 / 软底 / 阴影由模板用 `color-mix` 自动派生，不要手写 rgba。
 
 ## Visual Personality
 

@@ -5,8 +5,9 @@ from pathlib import Path
 
 
 REQUIRED_SNIPPETS = {
-    "template version": "DUNE_KEYNOTE_TEMPLATE_VERSION: 2026-05-28-stylepack-runtime-v2",
+    "template version": "DUNE_KEYNOTE_TEMPLATE_VERSION: 2026-06-10-fixed-canvas-v3",
     "runtime version": "DUNE_KEYNOTE_RUNTIME_VERSION",
+    "fixed canvas scaling": "--deck-scale",
     "standard runtime": "const slides = Array.from(document.querySelectorAll('.slide'))",
     "overview grid": 'id="overviewGrid"',
     "iframe thumbnails": "iframe.srcdoc",
@@ -50,6 +51,7 @@ ALLOWED_LAYOUT_TOKENS = {
     "icons-grid",
     "cards-2",
     "cards-3",
+    "cards-4",
     "grid-4",
     "multi-columns",
     "compare-2",
@@ -68,6 +70,9 @@ ALLOWED_LAYOUT_TOKENS = {
     "problem-solution",
     "goal-plan",
     "statement-stage",
+    "case-transform",
+    "system-map",
+    "reuse-hero",
     "thanks",
     "closing",
 }
@@ -156,6 +161,21 @@ def validate_deck(target_path: str) -> dict:
             raise ValueError(
                 f"script block {block_index} contains double-escaped regex syntax; "
                 "write runtime JavaScript directly, not as an escaped string"
+            )
+
+    deck_layer_match = re.search(r'@layer deck \{(.*?)\n\}</style>', html, flags=re.S)
+    if deck_layer_match:
+        deck_css = deck_layer_match.group(1)
+        if re.search(r'[\d.](vw|vh|vmin|vmax)\b', deck_css):
+            raise ValueError(
+                "sources/style.css uses viewport units (vw/vh); the deck renders on a fixed "
+                "1280x720 design canvas scaled by the runtime, so viewport units break "
+                "pixel-consistent layout. Use design px instead."
+            )
+        if "@media" in deck_css:
+            raise ValueError(
+                "sources/style.css contains @media queries; the fixed-canvas runtime handles "
+                "all resolution adaptation. Remove media queries and design in 1280x720 px."
             )
 
     markup = re.sub(r'<style\b[^>]*>.*?</style>', '', html, flags=re.S | re.I)

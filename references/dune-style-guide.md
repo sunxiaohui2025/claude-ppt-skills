@@ -124,27 +124,25 @@ font-family: "Alibaba PuHuiTi", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK
 </section>
 ```
 
-基础尺寸：
+基础尺寸（固定画布：所有页面在 1280x720 设计空间内编写，运行时整体等比缩放适配视口；slide 源文件与 `sources/style.css` 中禁止使用 `vw/vh` 单位和 `@media` 查询）：
 
 ```css
 .slide {
-  width: 100vw;
-  height: 100vh;
-  min-width: 960px;
-  min-height: 540px;
-  padding: 6vh 7vw 9vh;
+  position: absolute;
+  inset: 0; /* 位于固定 1280x720 的 .deck 画布内 */
+  padding: 56px 84px 88px; /* --stage-top / --stage-x / --stage-bottom */
 }
 
 .slide-stage {
-  width: min(1120px, 100%);
-  min-height: 68vh;
+  width: 1112px;   /* --stage-w */
+  max-height: 576px; /* --stage-h */
   display: grid;
   align-content: center;
 }
 
 .proof-object {
   width: 100%;
-  margin: 34px auto 0;
+  margin: 26px auto 0;
 }
 ```
 
@@ -493,9 +491,9 @@ font-family: "Alibaba PuHuiTi", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK
 
 ### 舞台安全区
 
-- 16:9 页面不要把内容顶到上下边缘。推荐使用 `--stage-top: clamp(52px, 8.2vh, 92px)` 和 `--stage-bottom: clamp(86px, 11vh, 128px)`。
-- 内容舞台宽度使用 `min(1180px, calc(100vw - var(--stage-x) * 2))`，高度使用 `calc(100vh - top - bottom)`。
-- 字号、主视觉、面板高度都使用 `clamp()`，同时参考 `vw` 和 `vh`，避免宽屏或低高屏时溢出。
+- 所有页面运行在固定 1280x720 设计画布上，运行时等比缩放适配任何分辨率；不要写 `vw/vh` 或 `@media`。
+- 安全区由模板 token 提供：`--stage-top: 56px`、`--stage-bottom: 88px`、`--stage-x: 84px`，舞台内容区为 `1112x576`。
+- 内容不要顶到舞台上下边缘；字号、面板尺寸直接写设计像素。
 - 页脚、进度条和导航属于舞台外信息，不应压到主体内容。
 
 ### 主色使用比例
@@ -506,11 +504,13 @@ font-family: "Alibaba PuHuiTi", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK
 
 ### 新增叙事版式
 
-- `layout-statement`：一句话大判断页，用于抛出关键观点；居中大标题 + 一条陶土色细线。
-- `layout-metrics`：数据发布页，用于给证据；一个巨型数字 + 右侧 2-3 条解释。
-- `layout-story`：案例故事页，用于讲转折；左侧巨型章节/案例号，右侧 A/B/C 三段叙事。
-- `layout-hero-visual`：图片或产品主视觉页，用于展示截图、产品或概念装置；图片占半屏以上。
-- `layout-runway`：横向跑道页，用于路线图、流程和发布节奏。
+注意：以下是叙事意图，不是类名。禁止把它们写成 `layout-*` 别名（校验器会拒绝）；统一映射到样例真实组件：
+
+- 一句话大判断页 → `statement-stage`（居中大标题 + `statement-rule` 细线）。
+- 数据发布页 → `goal-plan` 或 `reuse-hero`（巨型数字 + 右侧/下方解释）。
+- 案例故事页 → `case-transform`（旧痛点 → 新方案 + 底部结论条）。
+- 图片或产品主视觉页 → `full-image` 或 `split`。
+- 横向跑道页 → `timeline-h` 或 `flow`。
 
 ### 首页高级感
 

@@ -4,14 +4,14 @@
 
 ## Tokens
 
-- Background: `#0a1f3d`
-- Main text: `#f1f3f5`
-- Secondary text: `#b9c7d8`
-- Muted: `#93a4b8`
-- Accent: `#79b8ff`
-- Support: `#d7e7ff`
-- Panel: `rgba(241,243,245,.055)`
-- Line: `rgba(215,231,255,.16)`
+- Background `--cream`: `#0a1f3d`
+- Panel `--porcelain`: `#112d54`
+- Main text `--ink`: `#f1f3f5`
+- Secondary text `--stone`: `#b9c7d8`
+- Muted `--muted`: `#93a4b8`
+- Accent `--clay`: `#79b8ff`
+- Secondary accent `--accent-2`: `#ffd479` — 图表第二系列 / 暖对比点缀
+- 其余线条 / 软底 / 阴影由模板用 `color-mix` 自动派生，不要手写 rgba。
 
 ## Visual Personality
 

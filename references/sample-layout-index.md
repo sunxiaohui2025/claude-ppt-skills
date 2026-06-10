@@ -27,7 +27,7 @@
 - `09 图标+文字`：样式 `icons-grid`；3-4组图标配说明文案
 - `10 双卡片布局`：样式 `cards-2`；两个等宽面板
 - `11 三卡片布局`：样式 `cards-3`；三个等宽面板，仅放置简短文案
-- `12 四格网格`：样式 `grid-4`；四个紧凑内容模块。若四个卡片无法在一行保持舒展，不要强行使用三卡片扩展，改用四宫格
+- `12 四格网格`：样式 `grid-4`；四个紧凑内容模块（2x2）。四个简短并列项希望排成一行时，改用 `cards-4`
 - `13 多列列表`：样式 `multi-columns`；三列简短列表内容
 - `14 左右对比`：样式 `compare-2`；常规内容与高亮内容对照展示
 - `15 优劣分析`：样式 `compare-2`；优势与风险对比
@@ -51,6 +51,10 @@
 - `33 副标题栏+卡片`：样式 `layout-subtitle-band`；醒目副标题栏 + 三张辅助卡片
 - `34 交付流程`：样式 `layout-delivery-flow` + `flow-cards`；用户/前端/平台全链路交付流程
 - `35 结尾页`：样式 `thanks`；固定为最终页面，包含致谢标识、居中文字及作者信息，**禁止使用** `statement-rule` 样式
+- `36 单行四卡`：样式 `cards-4`；四个简短并列卡片排成一行，每张卡片文案必须很短
+- `37 案例改造`：样式 `case-transform` + `case-panel`；旧痛点 → 新方案左右对照，底部可加 `bottom-conclusion` 结论条
+- `38 系统全景`：样式 `system-map` + `system-col`/`system-core`/`system-node`；左侧输入、中央引擎、右侧输出
+- `39 复用主张`：样式 `reuse-hero` + `goal-number`/`reuse-tags`；巨型指标或主张 + 应用场景标签行
 
 章节页说明：章节页不要使用 `layout-cinematic-section`。应使用 `statement-stage` 章节结构，并包含 `section-ghost-number`、`kicker`、大标题和一句短副标题；不要放卡片、列表、流程或证明对象。
 

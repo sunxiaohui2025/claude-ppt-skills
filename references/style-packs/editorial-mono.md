@@ -4,13 +4,14 @@
 
 ## Tokens
 
-- Background: `#f7f5f0`
-- Main text: `#141414`
-- Secondary text: `#4d4a45`
-- Muted: `#777069`
-- Accent: `#141414` as italic serif / heavier editorial text treatment, not plain black text only.
-- Panel: `rgba(255,253,250,.50)`
-- Line: `rgba(20,20,20,.18)`
+- Background `--cream`: `#ffffff`
+- Main text `--ink`: `#141414`
+- Secondary text `--stone`: `#4d4a45`
+- Muted `--muted`: `#777069`
+- Accent `--clay`: `#141414` as italic serif / heavier editorial text treatment, not plain black text only.
+- Secondary accent `--accent-2`: `#6e6e6e`
+- Display font `--font-display`: Georgia / Songti serif（模板自动切换标题字体）
+- 其余线条 / 软底由模板用 `color-mix` 自动派生，不要手写 rgba。
 
 ## Visual Personality
 

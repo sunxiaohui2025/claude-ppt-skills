@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import html as html_lib
 import json
 import re
 import shutil
@@ -72,6 +73,15 @@ def merge_deck(deck_folder: str) -> dict:
     body_attrs = f' class="{body_class}"' if body_class else ""
     base_css = read(TEMPLATE_DIR / "base.css")
     custom_css = read(sources / "style.css") if (sources / "style.css").exists() else ""
+    if custom_css.strip():
+        if custom_css.count("{") != custom_css.count("}"):
+            raise ValueError(
+                "sources/style.css has unbalanced braces; fix it before merging "
+                "(it is injected into a CSS @layer and a syntax error would disable the whole layer)"
+            )
+        # Deck CSS lives in the `deck` cascade layer: it may tune visuals but can
+        # never override the runtime invariants in the `guard` layer.
+        custom_css = "@layer deck {\n" + custom_css + "\n}"
     runtime_js = read(TEMPLATE_DIR / "runtime.js")
     slide_files = sorted(sources.glob("slide-*.html"))
     if not slide_files:
@@ -97,7 +107,7 @@ def merge_deck(deck_folder: str) -> dict:
         slides.append("    " + html.replace("\n", "\n    "))
     template = read(TEMPLATE_DIR / "index.template.html")
     output = (template
-        .replace("{{DECK_TITLE}}", title)
+        .replace("{{DECK_TITLE}}", html_lib.escape(title))
         .replace("{{BODY_ATTRS}}", body_attrs)
         .replace("{{DECK_CSS}}", base_css + "\n\n" + custom_css)
         .replace("{{SLIDES}}", "\n\n".join(slides))

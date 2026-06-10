@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 
-VIEWPORTS = [(1366, 768), (1280, 720)]
+VIEWPORTS = [(1366, 768), (1280, 720), (1920, 1080)]
 CHROME_CANDIDATES = [
     Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
     Path("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"),
@@ -55,6 +55,12 @@ def check_deck(html_path: Path, screenshots_dir: Path | None = None) -> list[str
             for width, height in VIEWPORTS:
                 page = browser.new_page(viewport={"width": width, "height": height})
                 page.goto(url, wait_until="load")
+                # Freeze entrance animations so geometry checks see final layout,
+                # and wait for CJK font fallback to settle metrics.
+                page.add_style_tag(
+                    content="*{animation-duration:0s !important;animation-delay:0s !important;transition-duration:0s !important}"
+                )
+                page.evaluate("document.fonts.ready")
                 page.wait_for_timeout(250)
                 slide_count = page.evaluate("document.querySelectorAll('.slide').length")
                 if not slide_count:
