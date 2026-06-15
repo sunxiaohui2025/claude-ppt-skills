@@ -14,6 +14,8 @@ STYLE_BODY_CLASSES = {
     "ink-classic": "style-ink-classic",
     "indigo-porcelain": "style-indigo-porcelain",
     "editorial-mono": "style-editorial-mono",
+    "mist-lab": "style-mist-lab",
+    "porcelain-green": "style-porcelain-green",
 }
 
 

@@ -1220,6 +1220,232 @@
       repeating-linear-gradient(135deg, color-mix(in srgb, #141414 10%, transparent) 0 1px, transparent 1px 10px),
       linear-gradient(135deg, rgba(255, 253, 250, .72), rgba(222, 219, 210, .48));
   }
+
+  body.style-mist-lab {
+    --cream: #c9c7d8;
+    --porcelain: rgba(255, 255, 255, .34);
+    --sand: #d9d7e6;
+    --sand-soft: #e5e3ef;
+    --clay: #050505;
+    --clay-deep: #000000;
+    --accent-2: rgba(0, 0, 0, .36);
+    --ink: #050505;
+    --stone: rgba(0, 0, 0, .72);
+    --muted: rgba(0, 0, 0, .46);
+    --line: rgba(0, 0, 0, .16);
+    --panel-bg: rgba(255, 255, 255, .24);
+    --shadow-color: 32, 28, 42;
+    --grain-opacity: .018;
+    --font-display: "Bodoni 72", "Didot", "Georgia", "Songti SC", "STSong", serif;
+    background: #c9c7d8;
+  }
+  body.style-mist-lab::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 76% 20%, rgba(255, 255, 255, .34), transparent 28%),
+      radial-gradient(circle at 18% 82%, rgba(0, 0, 0, .05), transparent 24%),
+      linear-gradient(180deg, #c9c7d8, #c9c7d8);
+  }
+  body.style-mist-lab h1,
+  body.style-mist-lab h2 {
+    letter-spacing: -.05em;
+    font-family: var(--font-display);
+  }
+  body.style-mist-lab h3,
+  body.style-mist-lab .section-ghost-number,
+  body.style-mist-lab .card .num,
+  body.style-mist-lab .agenda-row strong,
+  body.style-mist-lab .delivery-card .role {
+    font-family: var(--font-display);
+  }
+  body.style-mist-lab .title-accent,
+  body.style-mist-lab .accent { color: var(--ink); font-style: italic; }
+  body.style-mist-lab .kicker {
+    width: fit-content;
+    padding: 6px 10px 7px;
+    color: #ffffff;
+    background: var(--ink);
+    letter-spacing: .18em;
+  }
+  body.style-mist-lab .kicker::before { display: none; }
+  body.style-mist-lab .panel,
+  body.style-mist-lab .meta-tag,
+  body.style-mist-lab .overview-card,
+  body.style-mist-lab .image-box,
+  body.style-mist-lab .full-image {
+    box-shadow: none;
+  }
+  body.style-mist-lab .panel,
+  body.style-mist-lab .image-box,
+  body.style-mist-lab .full-image {
+    border-color: rgba(0, 0, 0, .15);
+    background: rgba(255, 255, 255, .18);
+  }
+  body.style-mist-lab .meta-tag {
+    color: var(--ink);
+    background: transparent;
+    border-color: rgba(0, 0, 0, .18);
+  }
+  body.style-mist-lab .colored-card {
+    color: #ffffff;
+    background: rgba(5, 5, 5, .92);
+    border-color: rgba(5, 5, 5, .92);
+  }
+  body.style-mist-lab .colored-card :is(h3, p, li, .num, .label, .role) { color: #ffffff; }
+  body.style-mist-lab .cover-atmosphere {
+    display: block;
+    opacity: .34;
+  }
+  body.style-mist-lab .stage-mark,
+  body.style-mist-lab .thanks-mark {
+    background: rgba(255, 255, 255, .14);
+    border-color: rgba(0, 0, 0, .12);
+    box-shadow: none;
+    opacity: .8;
+  }
+  body.style-mist-lab .burst span { background: rgba(0, 0, 0, .74); }
+  body.style-mist-lab .orbit-ring,
+  body.style-mist-lab .float-glyph,
+  body.style-mist-lab .calm-icons span {
+    border-color: rgba(0, 0, 0, .12);
+    color: rgba(0, 0, 0, .28);
+    background: rgba(255, 255, 255, .14);
+    box-shadow: none;
+  }
+  body.style-mist-lab .float-glyph,
+  body.style-mist-lab .calm-icons span { font-family: var(--font-display); }
+  body.style-mist-lab .section-ghost-number,
+  body.style-mist-lab .brief-number,
+  body.style-mist-lab .serial {
+    color: rgba(0, 0, 0, .18);
+  }
+  body.style-mist-lab .overview-card {
+    background: rgba(255, 255, 255, .54);
+    border-color: rgba(0, 0, 0, .12);
+  }
+  body.style-mist-lab .image-box::before,
+  body.style-mist-lab .full-image {
+    background:
+      radial-gradient(circle at 24% 20%, rgba(255, 255, 255, .28), transparent 24%),
+      linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(0, 0, 0, .04));
+  }
+
+  body.style-porcelain-green {
+    --cream: #bdd4cc;
+    --porcelain: rgba(255, 255, 255, .30);
+    --sand: #cbded7;
+    --sand-soft: #d9e8e2;
+    --clay: #050505;
+    --clay-deep: #000000;
+    --accent-2: rgba(0, 0, 0, .34);
+    --ink: #050505;
+    --stone: rgba(0, 0, 0, .72);
+    --muted: rgba(0, 0, 0, .46);
+    --line: rgba(0, 0, 0, .16);
+    --panel-bg: rgba(255, 255, 255, .22);
+    --shadow-color: 25, 34, 30;
+    --grain-opacity: .018;
+    --font-display: "Bodoni 72", "Didot", "Georgia", "Songti SC", "STSong", serif;
+    background: #bdd4cc;
+  }
+  body.style-porcelain-green::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 16% 12%, rgba(255, 255, 255, .34), transparent 28%),
+      radial-gradient(circle at 84% 82%, rgba(0, 0, 0, .06), transparent 30%),
+      linear-gradient(180deg, #bdd4cc, #bdd4cc);
+  }
+  body.style-porcelain-green h1,
+  body.style-porcelain-green h2 {
+    letter-spacing: -.05em;
+    font-family: var(--font-display);
+  }
+  body.style-porcelain-green h3,
+  body.style-porcelain-green .section-ghost-number,
+  body.style-porcelain-green .card .num,
+  body.style-porcelain-green .agenda-row strong,
+  body.style-porcelain-green .delivery-card .role {
+    font-family: var(--font-display);
+  }
+  body.style-porcelain-green .title-accent,
+  body.style-porcelain-green .accent { color: var(--ink); font-style: italic; }
+  body.style-porcelain-green .kicker {
+    width: fit-content;
+    padding: 6px 10px 7px;
+    color: #ffffff;
+    background: var(--ink);
+    letter-spacing: .18em;
+  }
+  body.style-porcelain-green .kicker::before { display: none; }
+  body.style-porcelain-green .panel,
+  body.style-porcelain-green .meta-tag,
+  body.style-porcelain-green .overview-card,
+  body.style-porcelain-green .image-box,
+  body.style-porcelain-green .full-image {
+    box-shadow: none;
+  }
+  body.style-porcelain-green .panel,
+  body.style-porcelain-green .image-box,
+  body.style-porcelain-green .full-image {
+    border-color: rgba(0, 0, 0, .14);
+    background: rgba(255, 255, 255, .16);
+  }
+  body.style-porcelain-green .meta-tag {
+    color: var(--ink);
+    background: transparent;
+    border-color: rgba(0, 0, 0, .18);
+  }
+  body.style-porcelain-green .colored-card {
+    color: #ffffff;
+    background: rgba(5, 5, 5, .92);
+    border-color: rgba(5, 5, 5, .92);
+  }
+  body.style-porcelain-green .colored-card :is(h3, p, li, .num, .label, .role) { color: #ffffff; }
+  body.style-porcelain-green .cover-atmosphere {
+    display: block;
+    opacity: .32;
+  }
+  body.style-porcelain-green .stage-mark,
+  body.style-porcelain-green .thanks-mark {
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(0, 0, 0, .11);
+    box-shadow: none;
+    opacity: .82;
+  }
+  body.style-porcelain-green .burst span { background: rgba(0, 0, 0, .74); }
+  body.style-porcelain-green .orbit-ring,
+  body.style-porcelain-green .float-glyph,
+  body.style-porcelain-green .calm-icons span {
+    border-color: rgba(0, 0, 0, .12);
+    color: rgba(0, 0, 0, .28);
+    background: rgba(255, 255, 255, .14);
+    box-shadow: none;
+  }
+  body.style-porcelain-green .float-glyph,
+  body.style-porcelain-green .calm-icons span { font-family: var(--font-display); }
+  body.style-porcelain-green .section-ghost-number,
+  body.style-porcelain-green .brief-number,
+  body.style-porcelain-green .serial {
+    color: rgba(0, 0, 0, .18);
+  }
+  body.style-porcelain-green .overview-card {
+    background: rgba(255, 255, 255, .52);
+    border-color: rgba(0, 0, 0, .12);
+  }
+  body.style-porcelain-green .image-box::before,
+  body.style-porcelain-green .full-image {
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255, 255, 255, .26), transparent 24%),
+      linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(0, 0, 0, .04));
+  }
 }
 
 /* ---------------------------------------------------------------- motion */

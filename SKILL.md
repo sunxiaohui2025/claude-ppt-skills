@@ -103,7 +103,7 @@ Do not add QA automation, image generation, web search, or complex external depe
    - Presentation goal.
    - Occasion/scenario.
    - Desired length or rough slide count.
-   - Style pack. Default to `references/style-packs/dune.md` if the user does not specify a style. Supported built-in packs: `dune`, `ink-classic`, `indigo-porcelain`, `editorial-mono`. If adding a new style later, keep the same workflow and layout library; only swap style tokens, components, and motion rules.
+   - Style pack. Default to `references/style-packs/dune.md` if the user does not specify a style. Supported built-in packs: `dune`, `ink-classic`, `indigo-porcelain`, `editorial-mono`, `mist-lab`, `porcelain-green`. If adding a new style later, keep the same workflow and layout library; only swap style tokens, components, and motion rules.
    - Speaker/author and date if the cover or closing should show them.
    If key information is missing, make reasonable assumptions and clearly label them. Ask at most 3 focused questions only when the missing information would materially change the deck.
 2. Produce a confirmation outline before generating HTML:
@@ -236,6 +236,8 @@ Built-in style pack ids:
 - `ink-classic`: black/cream/gold commercial keynote style for business launches and internal talks.
 - `indigo-porcelain`: deep blue technical style for AI, research, architecture, and technology launches.
 - `editorial-mono`: black-and-white magazine/editorial style for personal, opinionated, or salon-style talks.
+- `mist-lab`: mist purple research-editorial style with colored background but black-only text system.
+- `porcelain-green`: celadon dossier style with technical calm background and black-only text system.
 
 To select a style in a deck, write:
 

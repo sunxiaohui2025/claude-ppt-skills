@@ -4,7 +4,7 @@
 
 它适合把大纲、笔记、Markdown、粗略想法或技术材料，转换成一套可以直接演示的 HTML 幻灯片。默认视觉风格是「沙丘色」：暖米色背景、陶土主色、克制动效、大标题叙事、宽松留白，整体更接近发布会 / Keynote / 技术宣讲，而不是传统 PPT 模板。
 
-### 四种风格
+### 六种风格
 <img width="1424" height="811" alt="截屏2026-05-28 15 23 36" src="https://github.com/user-attachments/assets/d8742e1d-0fc1-4930-ac9a-6cc783fd47cd" />
 
 ### 可以网页在线编辑
@@ -87,7 +87,7 @@
 - 发现内容太多时，优先拆页，不要硬塞。
 - 避免连续多页都是卡片、目录或普通列表。
 
-当前内置 4 套风格：
+当前内置 6 套风格：
 
 | 风格 ID | 中文名 | 适合场景 |
 | --- | --- | --- |
@@ -95,6 +95,8 @@
 | `ink-classic` | 黑色经典 | 商业发布、行业内部讲话、线下分享、私享会 |
 | `indigo-porcelain` | 靛蓝瓷 | AI、研究、技术发布会、架构分享 |
 | `editorial-mono` | 杂志直白专刊 | 个人观点、行业观察、专家演讲、杂志风私享会 |
+| `mist-lab` | 雾紫实验室 | AI 研究、技术判断、架构思考、理性私享会 |
+| `porcelain-green` | 青瓷技术档案 | 平台能力、Agent 架构、流程设计、技术宣讲 |
 
 ## 目录结构
 
@@ -412,6 +414,8 @@ python3 dune-keynote-slide/scripts/render_check.py my-deck --screenshots my-deck
 - `ink-classic`：墨水经典。
 - `indigo-porcelain`：靛蓝瓷。
 - `editorial-mono`：黑白专刊。
+- `mist-lab`：雾紫实验室。
+- `porcelain-green`：青瓷技术档案。
 
 新增风格建议放在：
 
